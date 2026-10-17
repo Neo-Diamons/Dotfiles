@@ -1,0 +1,56 @@
+- name: Greeter folders
+  ansible.builtin.file:
+    path: "{{ item.path }}"
+    state: directory
+    owner: "{{ item.owner }}"
+    mode: "0755"
+  loop:
+    - { path: "{{ greeter_dir }}", owner: root }
+    - { path: "{{ greeter_dir }}/config", owner: root }
+    - { path: "{{ greeter_theme_dir }}", owner: "{{ ansible_facts.user_id }}" }
+  loop_control: { label: "{{ item.path }}" }
+
+- name: Greeter components and theme (same files as the shell)
+  ansible.builtin.copy:
+    src: "{{ item.src }}"
+    dest: "{{ item.dest }}"
+    mode: preserve
+  loop:
+    - { src: "{{ playbook_dir }}/home/.config/quickshell/components/", dest: "{{ greeter_dir }}/components/" }
+    - { src: "{{ playbook_dir }}/home/.config/quickshell/config/Theme.qml", dest: "{{ greeter_dir }}/config/Theme.qml" }
+  loop_control: { label: "{{ item.dest }}" }
+
+- name: Greeter shell, compositor and greetd config
+  ansible.builtin.template:
+    src: "{{ item.src }}"
+    dest: "{{ item.dest }}"
+    mode: "0644"
+  loop:
+    - { src: shell.qml.j2, dest: "{{ greeter_dir }}/shell.qml" }
+    - { src: hyprland.lua.j2, dest: /etc/greetd/hyprland.lua }
+    - { src: config.toml.j2, dest: /etc/greetd/config.toml }
+  loop_control: { label: "{{ item.dest }}" }
+
+- name: Greeter palette reader
+  ansible.builtin.copy:
+    src: Colors.qml
+    dest: "{{ greeter_dir }}/config/Colors.qml"
+    mode: "0644"
+    follow: false
+
+- name: Copy the current colours and wallpaper
+  ansible.builtin.command: sh {{ home_dir }}/.config/wallust/hooks/sync-greeter.sh
+  environment:
+    HOME: "{{ home_dir }}"
+  register: greeter_sync
+  changed_when: greeter_sync.stdout | length > 0
+
+- name: Remove a dead display manager link
+  ansible.builtin.command: find -L /etc/systemd/system/display-manager.service -maxdepth 0 -type l -print -delete
+  register: greeter_dead_link
+  changed_when: greeter_dead_link.stdout | length > 0
+
+- name: Enable greetd
+  ansible.builtin.systemd:
+    name: greetd
+    enabled: true

@@ -1,0 +1,3 @@
+greeter_dir: /etc/greetd/quickshell
+greeter_theme_dir: /var/lib/quickshell-greeter
+greeter_kb_layout: fr

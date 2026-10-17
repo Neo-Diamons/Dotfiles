@@ -31,6 +31,7 @@
 | `wallpapers` | Upload from the controller (remote hosts only)                            |
 | `dotfiles`   | Copy `home/`, render `templates/`, manifest, orphans, wallust, reload     |
 | `vis`        | Pinned vis plugins (git clones, not vendored)                             |
+| `greeter`    | greetd login screen, Quickshell greeter (`greeter` trait)                 |
 | `system`     | Services and files outside `~` (needs `become`)                           |
 
 A new job gets its own role and its own tag in `site.yml`; do not grow a role into a grab bag.
@@ -38,7 +39,7 @@ A new job gets its own role and its own tag in `site.yml`; do not grow a role in
 ### Variables
 
 - Shared values live in `inventory/group_vars/all/` (`main`, `packages`, `flatpaks`, `zen`); per-host differences only in `inventory/host_vars/<host>.yml`.
-- A host describes what it is (`gpu`, `laptop`, `hybrid_gpu`, `sunshine`, `monitors`), not what to install. Package groups and settings are derived from those traits.
+- A host describes what it is (`gpu`, `laptop`, `hybrid_gpu`, `sunshine`, `greeter`, `monitors`), not what to install. Package groups and settings are derived from those traits.
 - The first entry of `monitors` is the main monitor (bar and cursor start).
 - Values private to a role go in `roles/<role>/vars/main.yml` and start with the role name (`dotfiles_`, `theme_`).
 - Command-line switches (`force`, `prune`, `reload`, `debloat`, `extensions`) are booleans with a default of `false`, used as `{{ x | bool }}`; the only role-less names allowed.

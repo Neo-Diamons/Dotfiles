@@ -3,6 +3,8 @@ package_groups:
   desktop:
     - hyprland
     - hyprpaper
+    - hypridle
+    - brightnessctl
     - hyprshot
     - libjxl
     - kimageformats
@@ -27,12 +29,16 @@ package_groups:
   sunshine: [sunshine]
   nvidia: [nvidia-settings, nvidia-utils, egl-wayland, libva-nvidia-driver, opencl-nvidia]
   intel: [mesa-utils, intel-ucode]
-  laptop: [brightnessctl]
+  greeter: [greetd]
   hybrid: [nvidia-prime, nvidia-utils]
 
 package_groups_enabled: [core, desktop, audio_bluetooth, dev, fonts, flatpak]
 package_groups_extra: []
-package_groups_host: "{{ [gpu] + (['laptop'] if laptop else []) + (['hybrid'] if hybrid_gpu else []) + (['sunshine'] if sunshine else []) }}"
+package_groups_host: >-
+  {{ [gpu]
+  + (['hybrid'] if hybrid_gpu else [])
+  + (['sunshine'] if sunshine else [])
+  + (['greeter'] if greeter else []) }}
 package_groups_all: "{{ package_groups_enabled + package_groups_host + package_groups_extra }}"
 packages: "{{ package_groups_all | map('extract', package_groups) | flatten | unique | list }}"
 

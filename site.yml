@@ -24,3 +24,4 @@
     - { role: dotfiles, tags: [files] }
     - { role: vis, tags: [vis] }
     - { role: system, tags: [system], become: true }
+    - { role: greeter, tags: [greeter], become: true, when: greeter | bool }

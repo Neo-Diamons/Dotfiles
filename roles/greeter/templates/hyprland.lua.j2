@@ -1,0 +1,30 @@
+{% for m in monitors %}
+hl.monitor({
+    output   = "{{ m.output }}",
+    mode     = "{{ m.mode }}",
+    position = "{{ m.position }}",
+    scale    = "{{ m.scale }}",
+})
+{% endfor %}
+
+hl.config({
+    misc = {
+        disable_hyprland_logo    = true,
+        disable_splash_rendering = true,
+        force_default_wallpaper  = 0,
+        background_color         = "rgb(000000)",
+    },
+    input = { kb_layout = "{{ greeter_kb_layout }}", numlock_by_default = true },
+    cursor = { default_monitor = "{{ monitors[0].output }}" },
+})
+
+{% if gpu == 'nvidia' %}
+hl.env("LIBVA_DRIVER_NAME", "nvidia")
+hl.env("GBM_BACKEND", "nvidia-drm")
+hl.env("__GLX_VENDOR_LIBRARY_NAME", "nvidia")
+hl.env("NVD_BACKEND", "direct")
+{% endif %}
+
+hl.on("hyprland.start", function()
+    hl.exec_cmd("qs -p {{ greeter_dir }}; hyprctl dispatch 'hl.dsp.exit()'")
+end)

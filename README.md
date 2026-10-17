@@ -55,7 +55,7 @@ CONVENTIONS.md            # coding rules (Ansible, Quickshell, Python scripts)
 
 Rules:
 - Everything in `home/` keeps its real path and name; only per-machine files move to `templates/` (same path, `.j2` suffix, rendered on apply).
-- A host describes what it is (`gpu`, `laptop`, `hybrid_gpu`, `sunshine`, `monitors`); packages and settings follow from that. The first monitor listed is the main one.
+- A host describes what it is (`gpu`, `laptop`, `hybrid_gpu`, `sunshine`, `greeter`, `monitors`); packages and settings follow from that. The first monitor listed is the main one.
 - Wallpapers are not in git: the playbook copies `~/Pictures/Wallpapers` from the controlling machine to a remote target.
 - Generated files are not tracked: wallust colours, `.qmlls.ini` (Quickshell symlink into `/run`), `__pycache__/`.
 - No personal data in the repo: a remote host's address and user go in `~/.ssh/config`.
@@ -86,5 +86,5 @@ Rules:
 - **Orphans:** files in the manifest but no longer in the repo are listed and deleted after a prompt. Files that were never managed are never touched.
 - **Only changes are written:** checksums decide what is copied; `--check --diff` shows exactly that.
 - **Reload:** when a file changed, Hyprland and Quickshell are reloaded at the end of the run.
-- **Packages:** groups in `inventory/group_vars/all/packages.yml`; a host gets the shared groups, the groups of its traits (`gpu`, `laptop`, `hybrid_gpu`, `sunshine`), plus its `package_groups_extra`. Flatpaks: `flatpaks_common` + `flatpaks_extra`.
+- **Packages:** groups in `inventory/group_vars/all/packages.yml`; a host gets the shared groups, the groups of its traits (`gpu`, `hybrid_gpu`, `sunshine`, `greeter`), plus its `package_groups_extra`. Flatpaks: `flatpaks_common` + `flatpaks_extra`.
 - **Wallpapers:** existing files are kept and nothing is deleted on the target; a local target is skipped.

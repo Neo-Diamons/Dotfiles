@@ -1,0 +1,110 @@
+import QtQuick
+import Quickshell
+import Quickshell.Wayland
+import Quickshell.Services.Greetd
+import qs.components
+
+ShellRoot {
+    id: root
+
+    readonly property string user: "{{ ansible_facts.user_id }}"
+    readonly property string mainScreen: "{{ monitors[0].output }}"
+
+    readonly property list<string> session: ["start-hyprland >/dev/null 2>&1"]
+
+    property string pending: ""
+    property bool busy: false
+    property bool launching: false
+
+    signal failed(string text)
+
+    function login(password) {
+        pending = password;
+        busy = true;
+        Greetd.createSession(user);
+    }
+
+    Connections {
+        target: Greetd
+
+        function onAuthMessage(message, error, responseRequired, echoResponse) {
+            if (responseRequired)
+                Greetd.respond(root.pending);
+        }
+
+        function onAuthFailure(message) {
+            root.pending = "";
+            root.busy = false;
+            root.failed("Wrong password, try again");
+        }
+
+        function onReadyToLaunch() {
+            root.pending = "";
+            root.launching = true;
+            Greetd.launch(root.session, ["XDG_SESSION_TYPE=wayland", "XDG_CURRENT_DESKTOP=Hyprland"], false);
+        }
+
+        function onLaunched() {
+            exitTimer.start();
+        }
+
+        function onError(error) {
+            root.pending = "";
+            root.busy = false;
+            root.failed("Login error, try again");
+        }
+    }
+
+    Timer {
+        id: exitTimer
+        interval: 400
+        onTriggered: Quickshell.execDetached(["hyprctl", "dispatch", "hl.dsp.exit()"])
+    }
+
+    Variants {
+        model: Quickshell.screens
+
+        PanelWindow {
+            id: window
+
+            required property var modelData
+
+            screen: modelData
+            color: "transparent"
+            anchors {
+                top: true
+                bottom: true
+                left: true
+                right: true
+            }
+            exclusionMode: ExclusionMode.Ignore
+            WlrLayershell.layer: WlrLayer.Overlay
+            WlrLayershell.keyboardFocus: WlrKeyboardFocus.Exclusive
+
+            WallpaperBackdrop {
+                anchors.fill: parent
+            }
+
+            LoginPanel {
+                id: panel
+                anchors.centerIn: parent
+                visible: window.modelData.name === root.mainScreen
+                title: root.launching ? "Starting" : "Login"
+                action: "Login"
+                user: root.user
+                busy: root.busy
+                loading: root.launching
+                onSubmitted: password => root.login(password)
+                Component.onCompleted: focusInput()
+
+                Connections {
+                    target: root
+
+                    function onFailed(text) {
+                        panel.fail(text);
+                    }
+                }
+            }
+        }
+    }
+}
