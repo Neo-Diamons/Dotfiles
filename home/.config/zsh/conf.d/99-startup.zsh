@@ -15,6 +15,7 @@ _run_startup_fetch() {
   local f
 
   clear
+  [[ -n "$TMUX" ]] && echo
   if (( max_logo_w > 10 )) && [[ -d $dir ]]; then
     for f in "$dir"/*(.N); do
       (( $(wc -L < "$f") <= max_logo_w && $(wc -l < "$f") < LINES - 2 )) && fitting+=("$f")
