@@ -1,0 +1,5 @@
+monitors:
+  - { output: eDP-1, mode: "preferred", position: "0x0", scale: "1" }
+gpu: intel
+hybrid_gpu: true
+laptop: true

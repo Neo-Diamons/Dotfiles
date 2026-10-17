@@ -1,0 +1,7 @@
+monitors:
+  - { output: DP-1, mode: "2560x1440@200", position: "0x0", scale: "1" }
+  - { output: HDMI-A-1, mode: "1920x1080@74.97", position: "-2560x0", scale: "0.75" }
+gpu: nvidia
+sunshine: true
+flatpaks_extra: [com.usebottles.bottles]
+autostart_discord: true

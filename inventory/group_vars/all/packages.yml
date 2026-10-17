@@ -1,0 +1,59 @@
+package_groups:
+  core: [ansible-core, zsh, starship, zoxide, fzf, eza, btop, fastfetch, python, wget, unzip, networkmanager]
+  desktop:
+    - hyprland
+    - hyprpaper
+    - hyprshot
+    - libjxl
+    - kimageformats
+    - imagemagick
+    - quickshell
+    - qt6-wayland
+    - xdg-desktop-portal
+    - xdg-desktop-portal-hyprland
+    - xsettingsd
+    - wl-clipboard
+    - xdotool
+    - foot
+    - yazi
+    - ffmpeg
+    - 7zip
+    - udisks2
+    - udiskie
+  audio_bluetooth: [pipewire-pulse, pipewire-alsa, wireplumber, bluez, bluez-utils]
+  dev: [rustup, nvm, lua-language-server, vis, vis-lexers, tokei, ansible-lint]
+  fonts: [noto-fonts-cjk, noto-fonts-emoji, ttf-space-mono-nerd]
+  flatpak: [flatpak]
+  sunshine: [sunshine]
+  nvidia: [nvidia-settings, nvidia-utils, egl-wayland, libva-nvidia-driver, opencl-nvidia]
+  intel: [mesa-utils, intel-ucode]
+  laptop: [brightnessctl]
+  hybrid: [nvidia-prime, nvidia-utils]
+
+package_groups_enabled: [core, desktop, audio_bluetooth, dev, fonts, flatpak]
+package_groups_extra: []
+package_groups_host: "{{ [gpu] + (['laptop'] if laptop else []) + (['hybrid'] if hybrid_gpu else []) + (['sunshine'] if sunshine else []) }}"
+package_groups_all: "{{ package_groups_enabled + package_groups_host + package_groups_extra }}"
+packages: "{{ package_groups_all | map('extract', package_groups) | flatten | unique | list }}"
+
+# Bare CachyOS extras, removed only with `-e debloat=true`
+packages_removed:
+  - alacritty
+  - btrfs-assistant
+  - cachyos-hello
+  - cachyos-kernel-manager
+  - cachyos-packageinstaller
+  - meld
+  - micro
+  - cachyos-micro-settings
+  - octopi
+  - qt5ct
+  - qt6ct
+  - vim
+  - ex-vi-compat
+  - scx-manager
+  - scx-scheds
+  - scx-tools
+  - pavucontrol
+
+cargo_crates: [wallust]

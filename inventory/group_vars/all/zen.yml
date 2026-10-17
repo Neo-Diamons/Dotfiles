@@ -1,0 +1,32 @@
+# Zen browser policy (policies.json), written by the browser role: force-installed extensions from
+# addons.mozilla.org, their settings and other policies. Rewritten only with `-e extensions=true`.
+zen_amo_url: https://addons.mozilla.org/firefox/downloads/latest
+zen_extensions_area: menupanel
+zen_extension_defaults: &zen_extension
+  installation_mode: normal_installed
+  default_area: "{{ zen_extensions_area }}"
+zen_extensions:
+  "{446900e4-71c2-419f-a6a7-df9c091e268b}": { <<: *zen_extension, install_url: "{{ zen_amo_url }}/bitwarden-password-manager/latest.xpi" }
+  "uBlock0@raymondhill.net": { <<: *zen_extension, install_url: "{{ zen_amo_url }}/ublock-origin/latest.xpi" }
+  "firefox@ghostery.com": { <<: *zen_extension, install_url: "{{ zen_amo_url }}/ghostery/latest.xpi" }
+  "sponsorBlocker@ajay.app": { <<: *zen_extension, install_url: "{{ zen_amo_url }}/sponsorblock/latest.xpi" }
+  "myallychou@gmail.com": { <<: *zen_extension, install_url: "{{ zen_amo_url }}/youtube-recommended-videos/latest.xpi" }   # Unhook
+  "{762f9885-5a13-4abd-9c77-433dcd38b8fd}": { <<: *zen_extension, install_url: "{{ zen_amo_url }}/return-youtube-dislikes/latest.xpi" }
+
+zen_policies:
+  TranslateEnabled: false
+  PasswordManagerEnabled: false
+  NoDefaultBookmarks: true
+  SearchEngines: { Default: DuckDuckGo, DefaultPrivate: Google }
+
+zen_extension_settings:
+  "firefox@ghostery.com":
+    disableOnboarding: true
+
+zen_policy:
+  policies: >-
+    {{ {'DisableAppUpdate': true, 'DontCheckDefaultBrowser': true,
+    'ExtensionSettings': zen_extensions,
+    '3rdparty': {'Extensions': zen_extension_settings}} | combine(zen_policies) }}
+
+zen_policies_path: "{{ home_dir }}/.local/share/flatpak/extension/app.zen_browser.zen.systemconfig/x86_64/stable/policies/policies.json"

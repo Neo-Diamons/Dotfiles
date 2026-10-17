@@ -1,0 +1,25 @@
+- name: Dotfiles
+  hosts: all
+  serial: 1
+  gather_subset: [min]
+  pre_tasks:
+    - name: Check the host variables
+      tags: [always]
+      ansible.builtin.assert:
+        that:
+          - gpu in ['nvidia', 'intel']
+          - package_groups_all | difference(package_groups.keys()) == []
+        fail_msg: >-
+          gpu must be nvidia or intel (got '{{ gpu }}') and every package group must exist in
+          package_groups (unknown: {{ package_groups_all | difference(package_groups.keys()) }})
+        quiet: true
+
+  roles:
+    - { role: packages, tags: [packages] }
+    - { role: rust, tags: [rust] }
+    - { role: flatpak, tags: [flatpak] }
+    - { role: theme, tags: [theme] }
+    - { role: browser, tags: [browser] }
+    - { role: wallpapers, tags: [files, wallpapers] }
+    - { role: dotfiles, tags: [files] }
+    - { role: system, tags: [system], become: true }

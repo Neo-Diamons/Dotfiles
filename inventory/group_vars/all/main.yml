@@ -1,0 +1,29 @@
+home_dir: "{{ ansible_facts.env.HOME }}"
+
+# Command-line switches
+force: false        # -e force=true: overwrite files modified outside the repo
+prune: false        # -e prune=true: delete orphaned files without asking
+reload: false       # -e reload=true: reload Hyprland and Quickshell even if nothing changed
+debloat: false      # -e debloat=true: remove the bare-CachyOS extras
+extensions: false   # -e extensions=true: rewrite the Zen policy
+
+# Per-host traits, set in host_vars/<host>.yml
+gpu: ""                    # required: nvidia | intel (picks the driver package group and the Hyprland env)
+laptop: false              # backlight access, battery saver
+hybrid_gpu: false          # with gpu: intel: Intel + NVIDIA laptop
+sunshine: false            # game streaming host: package and autostart
+autostart_discord: false   # start Discord minimized at login
+
+services_system: [udisks2]
+
+# Wallpapers are uploaded from the controller
+upload_wallpapers: true
+
+icon_theme_version: "6.6.0"          # SylEleuth/gruvbox-plus-icon-pack
+icon_theme_sha256: b10a8d6378d7b88ca6d21b90797a4aa7bbdbb1907ea74101a4b9db439d2773a2
+icon_theme_name: Gruvbox-Plus-Dark
+
+cursor_theme_version: "2.2"          # phisch/phinger-cursors
+cursor_theme_sha256: 46d4cfc30a38c19cada3339027b5a78f7b0bf74f3220eba7001c4fdd9d5a6e56
+cursor_theme_name: phinger-cursors-light   # variants: phinger-cursors-{dark,light}[-left]
+cursor_theme_size: 24

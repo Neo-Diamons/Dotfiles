@@ -1,0 +1,9 @@
+flatpaks_common:
+  - app.zen_browser.zen
+  - com.discordapp.Discord
+  - com.valvesoftware.Steam
+  - dev.zed.Zed
+flatpaks_extra: []
+flatpaks_removed: []   # removed with -e debloat=true
+
+flatpaks: "{{ flatpaks_common + flatpaks_extra }}"
