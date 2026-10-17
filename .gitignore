@@ -1,0 +1,12 @@
+# Cache
+.ansible/
+__pycache__/
+
+# Secrets
+.vault_pass
+
+# Generated
+home/.config/quickshell/.qmlls.ini
+
+# Private
+home/.config/fastfetch/ascii/private*.txt
