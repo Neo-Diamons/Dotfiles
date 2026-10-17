@@ -1,0 +1,97 @@
+{
+  "$schema": "https://github.com/fastfetch-cli/fastfetch/raw/dev/doc/json_schema.json",
+  "logo": {
+    "source": "${HOME}/.config/fastfetch/ascii/default.txt",
+    "type": "file",
+    "color": {
+      "1": "white"
+    }
+  },
+  "display": {
+    "separator": " : "
+  },
+  "modules": [
+    {
+      "type": "title",
+      "key": "  "
+    },
+    "break",
+    {
+      "type": "custom",
+      "format": "┌───────────────────────────────────────────────┐"
+    },
+    {
+      "type": "os",
+      "key": "   OS",
+      "keyColor": "red"
+    },
+    {
+      "type": "kernel",
+      "key": "   Kernel",
+      "keyColor": "red"
+    },
+    {
+      "type": "packages",
+      "key": "   Packages",
+      "keyColor": "green"
+    },
+    {
+      "type": "display",
+      "key": "  󰹑 Display",
+      "format": "{width}x{height} in {inch}\", {refresh-rate} Hz",
+      "keyColor": "green"
+    },
+    {
+      "type": "wm",
+      "key": "   WM",
+      "keyColor": "yellow"
+    },
+    {
+      "type": "terminal",
+      "key": "   Terminal",
+      "keyColor": "yellow"
+    },
+    {
+      "type": "custom",
+      "format": "└───────────────────────────────────────────────┘"
+    },
+    "break",
+    {
+      "type": "custom",
+      "format": "┌───────────────────────────────────────────────┐"
+    },
+    {
+      "type": "cpu",
+      "format": "{1}",
+      "key": "  󰘚 CPU",
+      "keyColor": "blue"
+    },
+    {
+      "type": "gpu",
+      "format": "{2}",
+      "key": "  󰢮 GPU",
+      "keyColor": "blue"
+    },
+    {
+      "type": "command",
+      "text": "echo nvidia $(cat /sys/module/nvidia/version 2>/dev/null || modinfo -F version nvidia 2>/dev/null || echo n/a)",
+      "key": "   GPU Driver",
+      "keyColor": "magenta"
+    },
+    {
+      "type": "memory",
+      "key": "   Memory",
+      "keyColor": "magenta"
+    },
+    {
+      "type": "custom",
+      "format": "└───────────────────────────────────────────────┘"
+    },
+    "break",
+    {
+      "type": "colors",
+      "paddingLeft": 2,
+      "symbol": "circle"
+    }
+  ]
+}
