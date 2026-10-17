@@ -9,5 +9,6 @@ hyprpaper = { template = "hyprpaper.conf", target = "~/.config/hypr/hyprpaper.co
 
 [hooks]
 fix-contrast = 'python "$HOME/.config/wallust/hooks/fix-contrast.py"'
+sync-terminals = 'sh "$HOME/.config/wallust/hooks/sync-terminals.sh"'
 hyrpland = 'hyprctl reload'
 qs-shell = 'qs ipc call shell reload'
