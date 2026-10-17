@@ -1,6 +1,4 @@
 # Run once at the end of the play, only when a file was copied.
-# Both work over SSH too: they find the running session through XDG_RUNTIME_DIR
-# and do nothing (no failure) when Hyprland / Quickshell are not running.
 - name: Reload Hyprland
   listen: reload desktop
   ansible.builtin.shell: |
@@ -18,7 +16,6 @@
 
 - name: Reload Quickshell
   listen: reload desktop
-  # Select by PID: without WAYLAND_DISPLAY (SSH) `qs ipc call` finds no instance.
   ansible.builtin.shell: |
     set -o pipefail
     for pid in $(qs list --all | awk '/Process ID:/ {print $3}'); do
@@ -27,4 +24,15 @@
   args: { executable: /bin/bash }
   environment:
     XDG_RUNTIME_DIR: "/run/user/{{ ansible_facts.user_uid }}"
+  changed_when: false
+
+- name: Reload tmux
+  listen: reload desktop
+  ansible.builtin.shell: |
+    set -o pipefail
+    command -v tmux >/dev/null || exit 0
+    tmux source-file "$HOME/.config/tmux/tmux.conf" 2>/dev/null || true
+  args: { executable: /bin/bash }
+  environment:
+    HOME: "{{ home_dir }}"
   changed_when: false
