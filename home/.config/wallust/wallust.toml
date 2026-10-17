@@ -1,0 +1,13 @@
+backend = "wal"
+
+[templates]
+quickshell = { template = "Colors.qml", target = "~/.config/quickshell/config/Colors.qml" }
+btop = { template = "btop.theme", target = "~/.config/btop/themes/wallust.theme" }
+hypr = { template = "hypr-colors.lua", target = "~/.config/hypr/colors.lua" }
+foot = { template = "foot-colors.ini", target = "~/.config/foot/colors.ini" }
+hyprpaper = { template = "hyprpaper.conf", target = "~/.config/hypr/hyprpaper.conf" }
+
+[hooks]
+fix-contrast = 'python "$HOME/.config/wallust/hooks/fix-contrast.py"'
+hyrpland = 'hyprctl reload'
+qs-shell = 'qs ipc call shell reload'
