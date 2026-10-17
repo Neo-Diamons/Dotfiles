@@ -1,0 +1,4 @@
+# Pinned by commit; update url and version together.
+vis_plugins:
+  - { name: vis-commentary, repo: "https://github.com/lutobler/vis-commentary.git", version: 0e06ed8212c12c6651cb078b822390094b396f08 }
+  - { name: vis-lspc, repo: "https://gitlab.com/muhq/vis-lspc.git", version: 9d0f7a0b82b1983b44636259733d6d2c39497315 }

@@ -22,4 +22,5 @@
     - { role: browser, tags: [browser] }
     - { role: wallpapers, tags: [files, wallpapers] }
     - { role: dotfiles, tags: [files] }
+    - { role: vis, tags: [vis] }
     - { role: system, tags: [system], become: true }

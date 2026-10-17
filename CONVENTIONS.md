@@ -30,6 +30,7 @@
 | `browser`    | Zen policy (extensions and settings)                                      |
 | `wallpapers` | Upload from the controller (remote hosts only)                            |
 | `dotfiles`   | Copy `home/`, render `templates/`, manifest, orphans, wallust, reload     |
+| `vis`        | Pinned vis plugins (git clones, not vendored)                             |
 | `system`     | Services and files outside `~` (needs `become`)                           |
 
 A new job gets its own role and its own tag in `site.yml`; do not grow a role into a grab bag.

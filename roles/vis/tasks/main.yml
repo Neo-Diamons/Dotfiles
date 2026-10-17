@@ -1,0 +1,6 @@
+- name: Install vis plugins
+  ansible.builtin.git:
+    repo: "{{ item.repo }}"
+    dest: "{{ home_dir }}/.config/vis/plugins/{{ item.name }}"
+    version: "{{ item.version }}"
+  loop: "{{ vis_plugins }}"
