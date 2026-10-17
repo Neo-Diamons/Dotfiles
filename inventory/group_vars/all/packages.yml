@@ -1,5 +1,5 @@
 package_groups:
-  core: [ansible-core, zsh, tmux, starship, zoxide, fzf, eza, btop, fastfetch, python, wget, unzip, networkmanager]
+  core: [ansible-core, zsh, tmux, starship, zoxide, fzf, fd, eza, btop, fastfetch, python, wget, unzip, networkmanager]
   desktop:
     - hyprland
     - hyprpaper

@@ -3,12 +3,21 @@
 # --- Tool integrations ---
 command -v zoxide &>/dev/null && eval "$(zoxide init zsh --cmd cd)"
 command -v direnv &>/dev/null && eval "$(direnv hook zsh)"
-command -v atuin  &>/dev/null && eval "$(atuin init zsh --disable-up-arrow)"
-[[ -f /usr/share/fzf/key-bindings.zsh ]] && source /usr/share/fzf/key-bindings.zsh   # Ctrl-T, Alt-C
 
-# Ctrl-R: atuin replaces fzf's history widget
-bindkey -r '^R' 2>/dev/null
-command -v atuin &>/dev/null && bindkey '^R' atuin-search
+# --- fzf ---
+_fd_skip=(
+  .git .venv .direnv .cache .local/share .var .steam .claude .ansible
+  .cargo .rustup .npm .nvm node_modules __pycache__ .mypy_cache
+  site-packages lib target Games Bottles
+)
+_fd_excludes=${(j: :)${_fd_skip/#/--exclude }}
+export FZF_DEFAULT_COMMAND="fd --type f --hidden --follow $_fd_excludes"
+export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
+export FZF_ALT_C_COMMAND="fd --type d --hidden --follow $_fd_excludes"
+export FZF_DEFAULT_OPTS='--height 40% --layout=reverse --border --color=16,bg:-1,bg+:0,gutter:-1,fg+:15,hl:5,hl+:5,info:8,prompt:5,pointer:5,marker:5,border:5'
+unset _fd_skip _fd_excludes
+
+[[ -f /usr/share/fzf/key-bindings.zsh ]] && source /usr/share/fzf/key-bindings.zsh   # Ctrl-T, Alt-C, Ctrl-R
 
 # --- Keybindings ---
 KEYTIMEOUT=30                       # 300ms: enough for ESC sequences / paste markers

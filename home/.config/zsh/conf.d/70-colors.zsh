@@ -1,4 +1,4 @@
-# Colours: syntax highlighting + fzf (palette-following)
+# Colours: syntax highlighting (palette-following)
 typeset -A ZSH_HIGHLIGHT_STYLES
 ZSH_HIGHLIGHT_STYLES=(
   default               'none'
@@ -23,11 +23,3 @@ ZSH_HIGHLIGHT_STYLES=(
   back-quoted-argument  'fg=5'
   comment               'fg=8'
 )
-
-# fzf: `16` = terminal ANSI palette; bg -1 = transparent
-_fd_excludes='--exclude .git --exclude .venv --exclude node_modules --exclude .direnv --exclude __pycache__ --exclude .mypy_cache'
-export FZF_DEFAULT_COMMAND="fd --type f --hidden --follow $_fd_excludes"
-export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
-export FZF_ALT_C_COMMAND="fd --type d --hidden --follow $_fd_excludes"
-export FZF_DEFAULT_OPTS='--height 40% --layout=reverse --border --color=16,bg:-1,bg+:-1,gutter:-1,hl:4,hl+:4,info:3,prompt:4,pointer:1,marker:2,border:8'
-unset _fd_excludes
