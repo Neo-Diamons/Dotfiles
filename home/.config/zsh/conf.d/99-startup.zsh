@@ -2,13 +2,11 @@ _run_startup_fetch() {
   add-zsh-hook -d precmd _run_startup_fetch
 
   [[ -n "$ZED_TERM" ]] && return
-  if [[ -n "$TMUX" ]]; then
-    [[ -n "$(tmux show-options -qv @greeted)" ]] && return
-    tmux set-option -q @greeted 1
-  fi
+  [[ -n "$TMUX" && -n "$(tmux show-options -qv @greeted)" ]] && return
   _is_vt && return
   (( LINES >= 30 && COLUMNS >= 60 )) || return
   command -v fastfetch &>/dev/null || return
+  [[ -n "$TMUX" ]] && tmux set-option -q @greeted 1
 
   local info_w=50 gap=3
   local max_logo_w=$(( COLUMNS - info_w - gap ))
