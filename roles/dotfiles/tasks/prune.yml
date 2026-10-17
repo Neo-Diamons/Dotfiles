@@ -1,0 +1,21 @@
+- name: Find orphaned files
+  ansible.builtin.set_fact:
+    dotfiles_orphans: "{{ dotfiles_previous.keys() | difference(dotfiles_managed) | list }}"
+
+- name: Ask before deleting orphans
+  ansible.builtin.pause:
+    prompt: "Delete these files, removed from the repo? (yes/no)\n{{ dotfiles_orphans | join(', ') }}"
+  register: dotfiles_prune_answer
+  when: dotfiles_orphans | length > 0 and not ansible_check_mode and not (prune | bool)
+
+- name: Report orphans
+  ansible.builtin.debug:
+    msg: "Orphans, would ask before deleting: {{ dotfiles_orphans }}"
+  when: dotfiles_orphans | length > 0 and ansible_check_mode
+
+- name: Delete orphans
+  ansible.builtin.file:
+    path: "{{ home_dir }}/{{ item }}"
+    state: absent
+  loop: "{{ dotfiles_orphans }}"
+  when: dotfiles_prune

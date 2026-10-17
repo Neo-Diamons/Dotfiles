@@ -1,0 +1,36 @@
+# Installs theme_archive (name, url, sha256, include) into ~/.local/share/icons, verified by checksum.
+- name: Check for {{ theme_archive.name }}
+  ansible.builtin.stat: { path: "{{ theme_icons_dir }}/{{ theme_archive.name }}" }
+  register: theme_installed
+
+- name: Install {{ theme_archive.name }}
+  when: not theme_installed.stat.exists
+  vars:
+    theme_file: "{{ theme_cache_dir }}/{{ theme_archive.url | basename }}"
+  block:
+    - name: Icons and cache directories
+      ansible.builtin.file:
+        path: "{{ item }}"
+        state: directory
+        mode: "0755"
+      loop: ["{{ theme_icons_dir }}", "{{ theme_cache_dir }}"]
+
+    - name: Download {{ theme_archive.name }}
+      ansible.builtin.get_url:
+        url: "{{ theme_archive.url }}"
+        dest: "{{ theme_file }}"
+        checksum: "sha256:{{ theme_archive.sha256 }}"
+        mode: "0644"
+      when: not ansible_check_mode
+
+    # The directories and the archive do not exist yet in check mode.
+    - name: Unpack {{ theme_archive.name }}
+      ansible.builtin.unarchive:
+        src: "{{ theme_file }}"
+        dest: "{{ theme_icons_dir }}"
+        remote_src: true
+        include: ["{{ theme_archive.include }}"]
+      when: not ansible_check_mode
+
+    - name: Remove the downloaded archive
+      ansible.builtin.file: { path: "{{ theme_file }}", state: absent }

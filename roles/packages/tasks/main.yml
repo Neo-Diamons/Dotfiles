@@ -1,0 +1,25 @@
+- name: System packages and login shell
+  become: true
+  block:
+    - name: Install packages
+      community.general.pacman:
+        name: "{{ packages }}"
+        state: present
+
+    - name: Remove unwanted CachyOS packages
+      community.general.pacman:
+        name: "{{ packages_removed | difference(packages) }}"
+        state: absent
+      when: debloat | bool
+
+    - name: Use zsh as the login shell
+      ansible.builtin.user:
+        name: "{{ ansible_facts.user_id }}"
+        shell: /usr/bin/zsh
+
+- name: Remove CachyOS config files (micro, XDG autostart)
+  ansible.builtin.file:
+    path: "{{ home_dir }}/.config/{{ item }}"
+    state: absent
+  loop: [micro, autostart]
+  when: debloat | bool

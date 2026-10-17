@@ -1,0 +1,12 @@
+- name: Set the default Rust toolchain
+  ansible.builtin.command:
+    cmd: rustup default stable
+    creates: "{{ home_dir }}/.rustup/toolchains/stable-*"
+
+- name: Install cargo crates
+  ansible.builtin.command:
+    cmd: "cargo install {{ item }}"
+    creates: "{{ home_dir }}/.cargo/bin/{{ item }}"
+  loop: "{{ cargo_crates }}"
+  environment:
+    PATH: "{{ home_dir }}/.cargo/bin:{{ ansible_facts.env.PATH }}"

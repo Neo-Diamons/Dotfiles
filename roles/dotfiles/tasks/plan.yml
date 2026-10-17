@@ -1,0 +1,70 @@
+- name: Load the manifest of the last apply
+  ansible.builtin.slurp: { src: "{{ dotfiles_manifest }}" }
+  register: dotfiles_manifest_raw
+  failed_when: false
+
+# Build artifacts (__pycache__) are never synced: Python rewrites them in place.
+- name: Collect repo files
+  ansible.builtin.set_fact:
+    dotfiles_previous: >-
+      {{ (dotfiles_manifest_raw.content | b64decode | from_json)
+      if dotfiles_manifest_raw.content is defined else {} }}
+    dotfiles_rendered: []
+    dotfiles_tree: >-
+      {{ lookup('community.general.filetree', playbook_dir ~ '/home/', wantlist=True)
+      | rejectattr('path', 'search', '(^|/)__pycache__(/|$)') | list }}
+    dotfiles_template_files: >-
+      {{ lookup('community.general.filetree', playbook_dir ~ '/templates/', wantlist=True)
+      | selectattr('state', 'eq', 'file') | selectattr('path', 'match', '.*\.j2$') | list }}
+
+# Per-machine files: templates/<path>.j2 is rendered to ~/<path> (done here, on
+# the controller, so the checksum is known before anything is written).
+- name: Render per-machine files
+  ansible.builtin.set_fact:
+    dotfiles_rendered: >-
+      {{ dotfiles_rendered + [{'path': item.path | regex_replace('\.j2$', ''),
+      'content': body, 'mode': '0644', 'sum': body | hash('sha1')}] }}
+  vars:
+    body: "{{ lookup('ansible.builtin.template', item.src) }}"
+  loop: "{{ dotfiles_template_files }}"
+  loop_control: { label: "{{ item.path }}" }
+
+- name: Compute managed paths
+  ansible.builtin.set_fact:
+    dotfiles_items: "{{ (dotfiles_tree | selectattr('state', 'eq', 'file') | list) + dotfiles_rendered }}"
+    dotfiles_repo_sums: >-
+      {{ lookup('ansible.builtin.pipe', 'cd ' ~ playbook_dir ~ '/home && find . -type f
+      -not -path "*/__pycache__/*" -print0 | xargs -0 sha1sum').splitlines() | dotfiles_sums }}
+
+- name: Wanted checksums
+  ansible.builtin.set_fact:
+    dotfiles_wanted: "{{ dotfiles_repo_sums | dotfiles_wanted(dotfiles_rendered) }}"
+    dotfiles_managed: "{{ dotfiles_items | map(attribute='path') | list }}"
+
+# One command (not one per file): keeps the apply fast, also over SSH.
+# Prints sha1sum lines, then stat lines (mode), for every managed file that exists.
+- name: Checksum the live files
+  ansible.builtin.shell:
+    cmd: xargs -d '\n' sh -c 'sha1sum "$@"; stat -c "%a  %n" "$@"' _ 2>/dev/null || true
+    stdin: "{{ dotfiles_managed | join('\n') }}"
+    chdir: "{{ home_dir }}"
+  register: dotfiles_live_raw
+  changed_when: false
+  check_mode: false
+
+- name: Find changed files and files modified outside the repo
+  ansible.builtin.set_fact:
+    dotfiles_to_copy: "{{ dotfiles_items | dotfiles_to_copy(live, dotfiles_wanted, modes) }}"
+    dotfiles_conflicts: "{{ dotfiles_items | dotfiles_conflicts(live, dotfiles_wanted, dotfiles_previous) }}"
+  vars:
+    live: "{{ dotfiles_live_raw.stdout_lines | dotfiles_sums }}"
+    modes: "{{ dotfiles_live_raw.stdout_lines | dotfiles_modes }}"
+
+- name: Refuse to overwrite files modified outside the repo
+  ansible.builtin.assert:
+    that: (dotfiles_conflicts | length == 0) or (force | bool)
+    fail_msg: |
+      These live files differ from the repo and were not written by the last apply:
+      {{ dotfiles_conflicts | join(', ') }}
+      Copy your changes into the repo, or re-run with -e force=true to overwrite them.
+    quiet: true

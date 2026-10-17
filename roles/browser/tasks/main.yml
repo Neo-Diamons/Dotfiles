@@ -1,0 +1,24 @@
+# Zen extensions, force-installed by Zen itself at startup from addons.mozilla.org.
+# The policy goes in the flatpak's `systemconfig` extension directory (per user, no sudo, survives Zen updates).
+# Profile data (settings, logins) is not touched. Written on the first run, then only with -e extensions=true.
+- name: Zen policy
+  when: "'app.zen_browser.zen' in flatpaks"
+  block:
+    - name: Check for the Zen policy
+      ansible.builtin.stat: { path: "{{ zen_policies_path }}" }
+      register: browser_zen_policy
+
+    - name: Install Zen extensions through its policy
+      when: (extensions | bool) or not browser_zen_policy.stat.exists
+      block:
+        - name: Zen policy directory
+          ansible.builtin.file:
+            path: "{{ zen_policies_path | dirname }}"
+            state: directory
+            mode: "0755"
+
+        - name: Write the Zen policy
+          ansible.builtin.copy:
+            dest: "{{ zen_policies_path }}"
+            mode: "0644"
+            content: "{{ zen_policy | to_nice_json(sort_keys=False) }}"

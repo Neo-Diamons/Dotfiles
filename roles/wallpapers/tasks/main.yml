@@ -1,0 +1,26 @@
+# Upload only: files missing on the target are copied from the controller,
+# existing ones are left alone and nothing is deleted there. Skipped when the
+# target is the controller itself.
+- name: Upload wallpapers
+  when: wallpapers_remote
+  block:
+    - name: List wallpapers on the controller
+      ansible.builtin.set_fact:
+        wallpapers_tree: "{{ lookup('community.general.filetree', lookup('env', 'HOME') ~ '/Pictures/Wallpapers/', wantlist=True, errors='ignore') }}"
+
+    - name: Wallpapers directories
+      ansible.builtin.file:
+        path: "{{ home_dir }}/Pictures/Wallpapers/{{ item.path }}"
+        state: directory
+        mode: "0755"
+      loop: "{{ [{'path': ''}] + (wallpapers_tree | selectattr('state', 'eq', 'directory') | list) }}"
+      loop_control: { label: "{{ item.path }}" }
+
+    - name: Copy missing wallpapers
+      ansible.builtin.copy:
+        src: "{{ item.src }}"
+        dest: "{{ home_dir }}/Pictures/Wallpapers/{{ item.path }}"
+        mode: "0644"
+        force: false
+      loop: "{{ wallpapers_tree | selectattr('state', 'eq', 'file') | list }}"
+      loop_control: { label: "{{ item.path }}" }

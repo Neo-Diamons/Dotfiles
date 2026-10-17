@@ -1,0 +1,26 @@
+# Colours are generated once from the first wallpaper; random-wallpaper.sh
+# regenerates them afterwards.
+- name: Check for the generated colours
+  tags: [wallust]
+  ansible.builtin.stat: { path: "{{ home_dir }}/.config/hypr/colors.lua" }
+  register: dotfiles_colors
+
+- name: Generate wallust colours (Colors.qml, colors.lua, foot, btop)
+  tags: [wallust]
+  when: not dotfiles_colors.stat.exists
+  ansible.builtin.shell: |
+    set -eo pipefail
+    wp=$({ find {{ (home_dir ~ '/Pictures/Wallpapers') | quote }} -type f 2>/dev/null || true; } | sort | sed -n 1p)
+    [ -n "$wp" ] || { echo NO_WALLPAPER; exit 0; }
+    wallust run -s "$wp"
+  register: dotfiles_wallust
+  changed_when: "'NO_WALLPAPER' not in dotfiles_wallust.stdout"
+  environment:
+    PATH: "{{ home_dir }}/.cargo/bin:{{ ansible_facts.env.PATH }}"
+
+# Handlers only fire when a file changed; -e reload=true reloads even when an earlier apply already copied everything.
+- name: Force a reload
+  ansible.builtin.debug: { msg: "Reloading Hyprland and Quickshell" }
+  changed_when: true
+  when: reload | bool
+  notify: reload desktop

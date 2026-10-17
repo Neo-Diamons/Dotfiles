@@ -1,0 +1,12 @@
+- name: Manifest directory
+  ansible.builtin.file:
+    path: "{{ dotfiles_manifest | dirname }}"
+    state: directory
+    mode: "0700"
+
+- name: Write the manifest
+  ansible.builtin.copy:
+    dest: "{{ dotfiles_manifest }}"
+    mode: "0600"
+    content: "{{ dotfiles_wanted | dotfiles_manifest(dotfiles_orphans, dotfiles_previous, not dotfiles_prune) | to_nice_json }}"
+  when: not ansible_check_mode

@@ -1,0 +1,36 @@
+pragma Singleton
+import QtQuick
+import Quickshell
+
+// Behaviour settings
+Singleton {
+    // Screens with a bar: the main monitor of the host (first of `monitors`)
+    readonly property list<string> barScreens: ["{{ monitors[0].output }}"]
+    readonly property int workspaceCount: 5
+
+    readonly property string locale: "en_GB"               // day / month names, first weekday
+    readonly property string barHourFormat: "hh"
+    readonly property string timeFormat: "hh:mm:ss"
+    readonly property string dateFormat: "dddd d MMMM yyyy"
+    readonly property string shortDateFormat: "dd/MM"
+
+    readonly property string terminal: "foot"              // for Terminal=true apps
+    readonly property string fileManager: "foot yazi"      // opens a mounted drive
+    readonly property int launcherPageSize: 10             // apps per page
+
+    readonly property int notifTimeout: 5000               // ms
+    readonly property int notifHistoryLimit: 50
+
+    readonly property int clipboardHistoryLimit: 50
+
+    readonly property int wifiListLimit: 8
+
+    readonly property string wallpaperFolder: "~/Pictures/Wallpapers"
+    readonly property bool wallpaperCoverCache: true      // small pre-cropped covers in ~/.cache/quickshell/wallpapers
+
+    readonly property int updatesInterval: 3               // hours
+    readonly property string updateCommand: "sudo pacman -Syu"
+    readonly property string updatesWindowSize: "1000 600" // px
+
+    readonly property int osdTimeout: 1500                 // ms
+}

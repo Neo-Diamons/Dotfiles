@@ -1,0 +1,3 @@
+dotfiles_manifest: "{{ home_dir }}/.local/state/dotfiles/manifest.json"
+# Lazy: evaluated after the prompt of prune.yml has registered its answer.
+dotfiles_prune: "{{ not ansible_check_mode and (prune | bool or (dotfiles_prune_answer.user_input | default('') | lower) in ['y', 'yes']) }}"

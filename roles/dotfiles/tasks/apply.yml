@@ -1,0 +1,16 @@
+# copy does not create parent directories: one mkdir for all of them.
+- name: Create the directories of the changed files
+  ansible.builtin.command:
+    argv: "{{ ['mkdir', '-p'] + (dotfiles_to_copy | map(attribute='path') | map('dirname') | unique | map('regex_replace', '^', home_dir ~ '/') | list) }}"
+  when: dotfiles_to_copy | length > 0
+  changed_when: false
+
+- name: Copy changed files
+  ansible.builtin.copy:
+    src: "{{ item.src | default(omit) }}"
+    content: "{{ item.content | default(omit) }}"
+    dest: "{{ home_dir }}/{{ item.path }}"
+    mode: "{{ item.mode }}"
+  loop: "{{ dotfiles_to_copy }}"
+  loop_control: { label: "{{ item.path }}" }
+  notify: reload desktop

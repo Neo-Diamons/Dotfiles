@@ -1,0 +1,30 @@
+# Run once at the end of the play, only when a file was copied.
+# Both work over SSH too: they find the running session through XDG_RUNTIME_DIR
+# and do nothing (no failure) when Hyprland / Quickshell are not running.
+- name: Reload Hyprland
+  listen: reload desktop
+  ansible.builtin.shell: |
+    set -o pipefail
+    sig=$(ls -t "$XDG_RUNTIME_DIR/hypr" 2>/dev/null | head -n1)
+    [ -n "$sig" ] || exit 0
+    export HYPRLAND_INSTANCE_SIGNATURE="$sig"
+    hyprctl reload
+    hyprctl setcursor {{ cursor_theme_name }} {{ cursor_theme_size }}
+    true
+  args: { executable: /bin/bash }
+  environment:
+    XDG_RUNTIME_DIR: "/run/user/{{ ansible_facts.user_uid }}"
+  changed_when: false
+
+- name: Reload Quickshell
+  listen: reload desktop
+  # Select by PID: without WAYLAND_DISPLAY (SSH) `qs ipc call` finds no instance.
+  ansible.builtin.shell: |
+    set -o pipefail
+    for pid in $(qs list --all | awk '/Process ID:/ {print $3}'); do
+      qs ipc --pid "$pid" call shell reload || true
+    done
+  args: { executable: /bin/bash }
+  environment:
+    XDG_RUNTIME_DIR: "/run/user/{{ ansible_facts.user_uid }}"
+  changed_when: false

@@ -1,0 +1,1 @@
+system_cpu_turbo_conf: /etc/tmpfiles.d/cpu-turbo.conf

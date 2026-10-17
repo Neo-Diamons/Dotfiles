@@ -1,0 +1,11 @@
+{% for m in monitors %}
+hl.monitor({
+    output   = "{{ m.output }}",
+    mode     = "{{ m.mode }}",
+    position = "{{ m.position }}",
+    scale    = "{{ m.scale }}",
+})
+{% endfor %}
+
+-- The first monitor listed is the main one: cursor start and bar
+hl.config({ cursor = { default_monitor = "{{ monitors[0].output }}" } })

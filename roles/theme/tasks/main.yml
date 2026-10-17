@@ -1,0 +1,38 @@
+- name: Icon and cursor themes
+  ansible.builtin.include_tasks: archive.yml
+  loop: "{{ theme_archives }}"
+  loop_control: { loop_var: theme_archive, label: "{{ theme_archive.name }}" }
+
+# Flatpak apps cannot see ~/.local/share/icons (where the themes live) unless allowed.
+- name: Read the flatpak icons override
+  ansible.builtin.command: flatpak override --user --show
+  register: theme_flatpak_override
+  changed_when: false
+  failed_when: false
+  check_mode: false
+
+- name: Let flatpak apps read the themes
+  ansible.builtin.command: flatpak override --user --filesystem=xdg-data/icons:ro
+  when: theme_flatpak_override.rc == 0 and 'xdg-data/icons:ro' not in theme_flatpak_override.stdout
+  changed_when: true
+
+# GTK4 / libadwaita / flatpak apps read the themes from gsettings, not settings.ini.
+- name: Read the gsettings themes
+  ansible.builtin.command: gsettings get org.gnome.desktop.interface {{ item.key }}
+  environment: &dbus
+    XDG_RUNTIME_DIR: "/run/user/{{ ansible_facts.user_uid }}"
+    DBUS_SESSION_BUS_ADDRESS: "unix:path=/run/user/{{ ansible_facts.user_uid }}/bus"
+  loop: "{{ theme_gsettings }}"
+  loop_control: { label: "{{ item.key }}" }
+  register: theme_gsettings_current
+  changed_when: false
+  failed_when: false
+  check_mode: false
+
+- name: Set the gsettings themes
+  ansible.builtin.command: gsettings set org.gnome.desktop.interface {{ item.item.key }} {{ item.item.value }}
+  environment: *dbus
+  loop: "{{ theme_gsettings_current.results }}"
+  loop_control: { label: "{{ item.item.key }}" }
+  when: item.rc == 0 and item.stdout | trim("'") != item.item.value | string
+  changed_when: true

@@ -1,0 +1,17 @@
+theme_icons_dir: "{{ home_dir }}/.local/share/icons"
+theme_cache_dir: "{{ home_dir }}/.cache/dotfiles"
+# Themes downloaded from upstream, each verified by checksum
+theme_archives:
+  - name: "{{ icon_theme_name }}"
+    url: "https://github.com/SylEleuth/gruvbox-plus-icon-pack/releases/download/v{{ icon_theme_version }}/gruvbox-plus-icon-pack-{{ icon_theme_version }}.zip"
+    sha256: "{{ icon_theme_sha256 }}"
+    include: "{{ icon_theme_name }}/*"            # zip entry names
+  - name: "{{ cursor_theme_name }}"
+    url: "https://github.com/phisch/phinger-cursors/releases/download/v{{ cursor_theme_version }}/phinger-cursors-variants.tar.bz2"
+    sha256: "{{ cursor_theme_sha256 }}"
+    include: "./{{ cursor_theme_name }}"          # tar entry names (extracts the directory)
+# gsettings keys (GTK4 / libadwaita / flatpak apps read these, not settings.ini)
+theme_gsettings:
+  - { key: icon-theme, value: "{{ icon_theme_name }}" }
+  - { key: cursor-theme, value: "{{ cursor_theme_name }}" }
+  - { key: cursor-size, value: "{{ cursor_theme_size }}" }

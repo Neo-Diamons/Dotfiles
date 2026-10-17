@@ -1,0 +1,1 @@
+wallpapers_remote: "{{ upload_wallpapers and (ansible_connection | default('ssh')) != 'local' }}"

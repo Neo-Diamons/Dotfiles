@@ -1,0 +1,10 @@
+- name: Plan
+  ansible.builtin.import_tasks: plan.yml
+- name: Apply
+  ansible.builtin.import_tasks: apply.yml
+- name: Prune
+  ansible.builtin.import_tasks: prune.yml
+- name: Manifest
+  ansible.builtin.import_tasks: manifest.yml
+- name: Finish
+  ansible.builtin.import_tasks: finish.yml
