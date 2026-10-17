@@ -1,0 +1,36 @@
+- name: GRUB theme
+  ansible.builtin.copy:
+    src: theme/
+    dest: "{{ grub_themes_dir }}/{{ grub_theme_name }}/"
+    mode: preserve
+  notify: Update GRUB config
+
+- name: GRUB icons
+  ansible.builtin.copy:
+    src: "icons/{{ item }}/"
+    dest: "{{ grub_themes_dir }}/{{ grub_theme_name }}/icons/"
+    mode: preserve
+  loop: [system, distro]
+  notify: Update GRUB config
+
+- name: GRUB settings
+  ansible.builtin.lineinfile:
+    path: /etc/default/grub
+    regexp: "^#?{{ item.key }}="
+    line: "{{ item.key }}='{{ item.value }}'"
+  loop:
+    - { key: GRUB_THEME, value: "{{ grub_themes_dir }}/{{ grub_theme_name }}/theme.txt" }
+    - { key: GRUB_CMDLINE_LINUX_DEFAULT, value: "{{ grub_cmdline }}" }
+    - { key: GRUB_DISABLE_OS_PROBER, value: "false" }
+    - { key: GRUB_GFXMODE, value: "auto" }
+    - { key: GRUB_COLOR_NORMAL, value: light-gray/black }
+    - { key: GRUB_COLOR_HIGHLIGHT, value: white/black }
+  loop_control: { label: "{{ item.key }}" }
+  notify: Update GRUB config
+
+- name: GRUB generator scripts disabled
+  ansible.builtin.file:
+    path: "/etc/grub.d/{{ item }}"
+    mode: "0644"
+  loop: "{{ grub_disabled_scripts }}"
+  notify: Update GRUB config

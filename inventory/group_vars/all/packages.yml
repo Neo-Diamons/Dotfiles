@@ -29,10 +29,11 @@ package_groups:
   sunshine: [sunshine]
   nvidia: [nvidia-settings, nvidia-utils, egl-wayland, libva-nvidia-driver, opencl-nvidia]
   intel: [mesa-utils, intel-ucode]
+  grub: [os-prober]
   greeter: [greetd]
   hybrid: [nvidia-prime, nvidia-utils]
 
-package_groups_enabled: [core, desktop, audio_bluetooth, dev, fonts, flatpak]
+package_groups_enabled: [core, desktop, audio_bluetooth, dev, fonts, flatpak, grub]
 package_groups_extra: []
 package_groups_host: >-
   {{ [gpu]

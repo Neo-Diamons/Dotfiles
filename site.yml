@@ -25,3 +25,4 @@
     - { role: vis, tags: [vis] }
     - { role: system, tags: [system], become: true }
     - { role: greeter, tags: [greeter], become: true, when: greeter | bool }
+    - { role: grub, tags: [grub], become: true }
