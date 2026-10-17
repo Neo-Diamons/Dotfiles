@@ -17,7 +17,17 @@ export FZF_ALT_C_COMMAND="fd --type d --hidden --follow $_fd_excludes"
 export FZF_DEFAULT_OPTS='--height 40% --layout=reverse --border --color=16,bg:-1,bg+:0,gutter:-1,fg+:15,hl:5,hl+:5,info:8,prompt:5,pointer:5,marker:5,border:5'
 unset _fd_skip _fd_excludes
 
-[[ -f /usr/share/fzf/key-bindings.zsh ]] && source /usr/share/fzf/key-bindings.zsh   # Ctrl-T, Alt-C, Ctrl-R
+# Ctrl-R: history search
+# Ctrl-T: file picker
+# Alt-C: directory picker
+[[ -f /usr/share/fzf/key-bindings.zsh ]] && source /usr/share/fzf/key-bindings.zsh
+
+# Ctrl-F: zoxide picker
+if command -v zoxide &>/dev/null; then
+  _zoxide_pick() { zle -I; cdi; zle reset-prompt }
+  zle -N _zoxide_pick
+  bindkey '^F' _zoxide_pick
+fi
 
 # --- Keybindings ---
 KEYTIMEOUT=30                       # 300ms: enough for ESC sequences / paste markers
