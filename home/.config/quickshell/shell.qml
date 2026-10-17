@@ -9,11 +9,12 @@ import qs.modules.launcher
 import qs.modules.lock
 import qs.modules.notifications
 import qs.modules.osd
+import qs.modules.power
 import qs.modules.polkit
 import qs.modules.wallpaper
 import qs.utils
 
-// Entry point: bars, launcher, lock screen, notifications, OSD, wallpaper menu and polkit agent (`qs ipc call shell reload`)
+// Entry point: bars, launcher, power menu, lock screen, notifications, OSD, wallpaper menu and polkit agent (`qs ipc call shell reload`)
 ShellRoot {
     id: root
 
@@ -54,6 +55,7 @@ ShellRoot {
 
     DimOverlay {}
     LauncherWindow {}
+    PowerMenu {}
     LockScreen {
         id: lockScreen
         onLockedChanged: {
