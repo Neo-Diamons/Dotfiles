@@ -31,3 +31,9 @@
     mode: "0644"
   when: laptop
   notify: Apply tmpfiles rules
+
+- name: PAM service of the Quickshell lock screen
+  ansible.builtin.copy:
+    src: quickshell-lock.pam
+    dest: /etc/pam.d/quickshell-lock
+    mode: "0644"

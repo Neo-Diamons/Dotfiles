@@ -4,22 +4,31 @@ import QtQuick
 import Quickshell
 import Quickshell.Io
 import qs.modules.bar
+import qs.modules.dim
 import qs.modules.launcher
+import qs.modules.lock
 import qs.modules.notifications
 import qs.modules.osd
 import qs.modules.polkit
 import qs.modules.wallpaper
 import qs.utils
 
-// Entry point: bars, launcher, notifications, OSD, wallpaper menu and polkit agent (`qs ipc call shell reload`)
+// Entry point: bars, launcher, lock screen, notifications, OSD, wallpaper menu and polkit agent (`qs ipc call shell reload`)
 ShellRoot {
+    id: root
+
+    property bool reloadPending: false
+
     settings.watchFiles: false
 
     IpcHandler {
         target: "shell"
 
         function reload(): void {
-            Quickshell.reload(true);
+            if (lockScreen.locked)
+                root.reloadPending = true;
+            else
+                Quickshell.reload(true);
         }
     }
 
@@ -43,7 +52,15 @@ ShellRoot {
         BarWindow {}
     }
 
+    DimOverlay {}
     LauncherWindow {}
+    LockScreen {
+        id: lockScreen
+        onLockedChanged: {
+            if (!locked && root.reloadPending)
+                Quickshell.reload(true);
+        }
+    }
     NotifWindow {}
     VolumeOsd {}
     WallpaperMenu {}

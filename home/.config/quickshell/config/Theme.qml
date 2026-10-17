@@ -70,6 +70,8 @@ QtObject {
 
         // Polkit password dialog
         readonly property int polkitWidth: 420
+
+        readonly property int loginWidth: 380
     }
 
     // Shadow
@@ -125,5 +127,6 @@ QtObject {
         readonly property int sizeLarge: 16
         readonly property int sizeClock: 12
         readonly property int sizeHuge: 28
+        readonly property int sizeLock: 64
     }
 }
