@@ -34,6 +34,7 @@
 | `zsh`        | Pinned zinit clone (plugins are fetched by zinit itself)                  |
 | `greeter`    | greetd login screen, Quickshell greeter (`greeter` trait)                 |
 | `system`     | Services and files outside `~` (needs `become`)                           |
+| `plymouth`   | Boot splash theme and initramfs hook (needs `become`, `plymouth` trait)   |
 | `grub`       | GRUB theme and kernel command line (needs `become`)                       |
 
 A new job gets its own role and its own tag in `site.yml`; do not grow a role into a grab bag.
@@ -63,7 +64,7 @@ A new job gets its own role and its own tag in `site.yml`; do not grow a role in
 
 - `ansible-lint` must report 0 warnings.
 - Run `ansible-playbook site.yml -l <host> --check --diff` before every apply.
-- `-K` (sudo password) is only needed for `packages`, `flatpak`, `system`, `greeter` and `grub`; `-k` (SSH password) only for remote hosts.
+- `-K` (sudo password) is only needed for `packages`, `flatpak`, `system`, `greeter`, `plymouth` and `grub`; `-k` (SSH password) only for remote hosts.
 
 ## Quickshell
 

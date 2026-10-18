@@ -14,6 +14,7 @@ hybrid_gpu: false          # with gpu: intel: Intel + NVIDIA laptop
 sunshine: false            # game streaming host: package and autostart
 autostart_discord: false   # start Discord minimized at login
 greeter: true              # greetd login screen
+plymouth: true             # Plymouth boot splash
 
 services_system: [udisks2]
 

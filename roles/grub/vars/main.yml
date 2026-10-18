@@ -1,4 +1,4 @@
 grub_theme_name: brutal
 grub_themes_dir: /usr/share/grub/themes
-grub_cmdline: nowatchdog nvme_load=YES zswap.enabled=0 quiet loglevel=3 vt.global_cursor_default=0
+grub_cmdline: "nowatchdog nvme_load=YES zswap.enabled=0 quiet{{ ' splash' if plymouth | bool }} loglevel=3 vt.global_cursor_default=0"
 grub_disabled_scripts: [25_bli, 31_efi_bootnext]

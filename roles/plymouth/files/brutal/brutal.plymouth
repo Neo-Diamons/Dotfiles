@@ -1,0 +1,8 @@
+[Plymouth Theme]
+Name=brutal
+Description=Plain background with a square progress bar
+ModuleName=script
+
+[script]
+ImageDir=/usr/share/plymouth/themes/brutal
+ScriptFile=/usr/share/plymouth/themes/brutal/brutal.script

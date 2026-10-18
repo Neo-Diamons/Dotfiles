@@ -26,4 +26,5 @@
     - { role: zsh, tags: [zsh] }
     - { role: system, tags: [system], become: true }
     - { role: greeter, tags: [greeter], become: true, when: greeter | bool }
+    - { role: plymouth, tags: [plymouth], become: true, when: plymouth | bool }
     - { role: grub, tags: [grub], become: true }

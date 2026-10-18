@@ -31,6 +31,7 @@ package_groups:
   intel: [mesa-utils, intel-ucode]
   grub: [os-prober]
   greeter: [greetd]
+  plymouth: [plymouth]
   hybrid: [nvidia-prime, nvidia-utils]
 
 package_groups_enabled: [core, desktop, audio_bluetooth, dev, fonts, flatpak, grub]
@@ -39,7 +40,8 @@ package_groups_host: >-
   {{ [gpu]
   + (['hybrid'] if hybrid_gpu else [])
   + (['sunshine'] if sunshine else [])
-  + (['greeter'] if greeter else []) }}
+  + (['greeter'] if greeter else [])
+  + (['plymouth'] if plymouth else []) }}
 package_groups_all: "{{ package_groups_enabled + package_groups_host + package_groups_extra }}"
 packages: "{{ package_groups_all | map('extract', package_groups) | flatten | unique | list }}"
 

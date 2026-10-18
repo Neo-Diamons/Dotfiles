@@ -1,0 +1,29 @@
+- name: Plymouth theme
+  ansible.builtin.copy:
+    src: "{{ plymouth_theme_name }}/"
+    dest: "{{ plymouth_themes_dir }}/{{ plymouth_theme_name }}/"
+    mode: preserve
+  notify: Rebuild initramfs
+
+- name: Plymouth draws on the firmware framebuffer until the GPU driver is up
+  community.general.ini_file:
+    path: /etc/plymouth/plymouthd.conf
+    section: Daemon
+    option: UseSimpledrm
+    value: "1"
+    no_extra_spaces: true
+    mode: "0644"
+  notify: Rebuild initramfs
+
+- name: Look for dracut
+  ansible.builtin.stat:
+    path: /usr/bin/dracut
+  register: plymouth_dracut
+
+- name: Plymouth mkinitcpio hook
+  ansible.builtin.replace:
+    path: /etc/mkinitcpio.conf
+    regexp: '^(HOOKS=\((?!.*\bplymouth\b).*\bsystemd)\b'
+    replace: '\1 plymouth'
+  when: not plymouth_dracut.stat.exists
+  notify: Rebuild initramfs
