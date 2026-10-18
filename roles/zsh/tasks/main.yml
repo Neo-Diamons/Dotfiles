@@ -1,0 +1,5 @@
+- name: Install zinit
+  ansible.builtin.git:
+    repo: "{{ zsh_zinit_repo }}"
+    dest: "{{ home_dir }}/.local/share/zinit/zinit.git"
+    version: "{{ zsh_zinit_version }}"

@@ -31,6 +31,7 @@
 | `wallpapers` | Upload from the controller (remote hosts only)                            |
 | `dotfiles`   | Copy `home/`, render `templates/`, manifest, orphans, wallust, reload     |
 | `vis`        | Pinned vis plugins (git clones, not vendored)                             |
+| `zsh`        | Pinned zinit clone (plugins are fetched by zinit itself)                  |
 | `greeter`    | greetd login screen, Quickshell greeter (`greeter` trait)                 |
 | `system`     | Services and files outside `~` (needs `become`)                           |
 | `grub`       | GRUB theme and kernel command line (needs `become`)                       |
