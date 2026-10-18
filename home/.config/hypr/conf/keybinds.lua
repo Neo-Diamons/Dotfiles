@@ -17,7 +17,7 @@ hl.bind(mainMod .. " + Print", hl.dsp.exec_cmd("hyprshot --mode output -m active
 hl.bind(mainMod .. " + SHIFT + Print", hl.dsp.exec_cmd("hyprshot --mode window --clipboard-only"))
 hl.bind(mainMod .. " + F", hl.dsp.window.fullscreen({ mode = 1 }))
 hl.bind(mainMod .. " + SHIFT + F", hl.dsp.window.fullscreen())
-hl.bind(mainMod .. " + J", hl.dsp.layout("togglesplit"))
+hl.bind(mainMod .. " + SHIFT + J", hl.dsp.layout("togglesplit"))
 
 -- Move focus with mainMod + arrow keys
 hl.bind(mainMod .. " + left", hl.dsp.focus({ direction = "left" }))
