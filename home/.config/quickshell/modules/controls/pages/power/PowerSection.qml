@@ -12,7 +12,7 @@ ColumnLayout {
     Layout.fillWidth: true
     spacing: Theme.spacing.sm
 
-    readonly property var devices: UPower.devices.values.filter(d => d.type !== UPowerDeviceType.LinePower && (d.isLaptopBattery || d.percentage > 0))
+    readonly property var devices: UPower.devices.values.filter(d => d.type !== UPowerDeviceType.LinePower && (d.isLaptopBattery || d.percentage > 0)) // qmllint disable missing-property
 
     visible: devices.length > 0
 

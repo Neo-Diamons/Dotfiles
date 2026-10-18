@@ -10,9 +10,9 @@ Singleton {
 
     readonly property var sink: Pipewire.defaultAudioSink
     readonly property var source: Pipewire.defaultAudioSource
-    readonly property var sinks: Pipewire.nodes.values.filter(n => n.audio && n.isSink && !n.isStream)
+    readonly property var sinks: Pipewire.nodes.values.filter(n => n.audio && n.isSink && !n.isStream) // qmllint disable missing-property
 
-    readonly property var streams: Pipewire.nodes.values.filter(n => n.audio && n.type === PwNodeType.AudioOutStream)
+    readonly property var streams: Pipewire.nodes.values.filter(n => n.audio && n.type === PwNodeType.AudioOutStream) // qmllint disable missing-property
 
     readonly property bool ready: sink !== null && sink.audio !== null
     readonly property real volume: ready ? sink.audio.volume : 0
@@ -85,6 +85,6 @@ Singleton {
 
     // Nodes must be tracked for their audio properties to be available
     PwObjectTracker {
-        objects: Pipewire.nodes.values
+        objects: Pipewire.nodes.values // qmllint disable missing-property
     }
 }

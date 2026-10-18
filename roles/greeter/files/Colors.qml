@@ -1,4 +1,5 @@
 pragma Singleton
+
 import QtQuick
 import Quickshell
 import Quickshell.Io
@@ -9,12 +10,12 @@ Singleton {
     readonly property string themeDir: "/var/lib/quickshell-greeter"
 
     function pick(name, fallback) {
-        const value = theme.adapter.colors[name];
+        const value = theme.adapter.colors[name]; // qmllint disable unresolved-type
         return typeof value === "string" && /^#[0-9a-fA-F]{6,8}$/.test(value) ? value : fallback;
     }
 
     readonly property string wallpaper: {
-        const path = theme.adapter.wallpaper;
+        const path = theme.adapter.wallpaper; // qmllint disable unresolved-type
         return typeof path === "string" && path.startsWith(themeDir + "/") && path.indexOf("..") < 0 ? path : "";
     }
 
@@ -45,7 +46,7 @@ Singleton {
         blockLoading: true
         printErrors: false
 
-        adapter: JsonAdapter {
+        adapter: JsonAdapter { // qmllint disable unresolved-type
             property string wallpaper: ""
             property var colors: ({})
         }

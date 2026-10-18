@@ -10,7 +10,7 @@ import qs.config
 Singleton {
     id: root
 
-    readonly property var devices: Networking.devices.values
+    readonly property var devices: Networking.devices.values // qmllint disable missing-property
     readonly property var wired: devices.filter(d => d.type === DeviceType.Wired)
     readonly property var wifi: devices.find(d => d.type === DeviceType.Wifi) ?? null
 

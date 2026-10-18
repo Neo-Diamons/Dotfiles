@@ -1,3 +1,5 @@
+pragma ComponentBehavior: Bound
+
 import QtQuick
 import Quickshell
 import Quickshell.Io
@@ -24,7 +26,7 @@ Scope {
     Variants {
         model: Quickshell.screens
 
-        PanelWindow {
+        PanelWindow { // qmllint disable uncreatable-type
             required property var modelData
 
             screen: modelData

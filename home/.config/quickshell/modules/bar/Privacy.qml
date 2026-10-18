@@ -9,7 +9,7 @@ ColumnLayout {
     id: root
     spacing: Theme.spacing.xs
 
-    readonly property var nodes: Pipewire.nodes.values
+    readonly property var nodes: Pipewire.nodes.values // qmllint disable missing-property
 
     function prop(n, key) {
         return n.properties ? (n.properties[key] || "") : "";

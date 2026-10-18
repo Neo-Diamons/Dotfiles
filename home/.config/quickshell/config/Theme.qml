@@ -1,4 +1,5 @@
 pragma Singleton
+
 import QtQuick
 
 // Sizes, spacing, fonts and motion

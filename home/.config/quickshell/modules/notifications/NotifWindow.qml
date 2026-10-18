@@ -16,10 +16,8 @@ PanelWindow { // qmllint disable uncreatable-type
         right: true
     }
 
-    margins { // qmllint disable unresolved-type unqualified
-        top: Theme.spacing.md
-        right: Theme.dims.barWidth + Theme.spacing.md
-    }
+    margins.top: Theme.spacing.md // qmllint disable missing-property
+    margins.right: Theme.dims.barWidth + Theme.spacing.md // qmllint disable missing-property
 
     color: "transparent"
     WlrLayershell.layer: WlrLayer.Overlay

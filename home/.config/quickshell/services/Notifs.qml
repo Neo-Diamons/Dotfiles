@@ -75,7 +75,7 @@ Singleton {
         onNotification: n => {
             const tag = root.stackTag(n);
             if (tag !== "")
-                for (const old of server.trackedNotifications.values.filter(o => o !== n && root.stackTag(o) === tag))
+                for (const old of server.trackedNotifications.values.filter(o => o !== n && root.stackTag(o) === tag)) // qmllint disable missing-property
                     old.dismiss();
             if (!n.transient) {
                 root.history = [root.snapshot(n)].concat(root.history.filter(h => h.id !== n.id && (tag === "" || h.tag !== tag))).slice(0, Config.notifHistoryLimit);

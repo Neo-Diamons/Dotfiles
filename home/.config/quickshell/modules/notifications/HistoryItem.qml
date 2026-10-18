@@ -14,7 +14,7 @@ BrutalSurface {
     readonly property color accentColor: modelData.critical ? Colors.urgent : Colors.accent
 
     Layout.fillWidth: true
-    implicitHeight: content.implicitHeight + Theme.spacing.sm * 2 + shadowOffset
+    implicitHeight: row.implicitHeight + Theme.spacing.sm * 2 + shadowOffset
 
     fillColor: Colors.bgOverlay
     borderColor: hover.hovered ? accentColor : (modelData.critical ? Colors.urgent : Colors.borderDefault)
@@ -25,7 +25,7 @@ BrutalSurface {
     }
 
     RowLayout {
-        id: content
+        id: row
         anchors.fill: parent
         anchors.margins: Theme.spacing.sm
         spacing: Theme.spacing.sm

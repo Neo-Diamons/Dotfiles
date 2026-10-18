@@ -8,7 +8,7 @@ import Quickshell.Services.Mpris
 Singleton {
     id: root
 
-    readonly property var players: Mpris.players.values
+    readonly property var players: Mpris.players.values // qmllint disable missing-property
 
     property var selected: null
     readonly property var active: selected && players.includes(selected) ? selected : (players.find(p => p.isPlaying) ?? players[0] ?? null)

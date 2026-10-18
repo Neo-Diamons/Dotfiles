@@ -11,6 +11,7 @@
 | `site.yml`        | The playbook: role order, tags, host checks                                     |
 | `CONVENTIONS.md`  | This file                                                                       |
 | `.githooks/`      | Git hooks (`pre-commit` runs `ansible-lint`)                                  |
+| `.qmllint.ini`    | QML linter settings (see Quickshell)                                            |
 
 - A file goes in `home/` unless it differs per machine; then it becomes a template, never a copy per host.
 - Generated files (wallust colours, `.qmlls.ini`) are never in the repo.
@@ -86,7 +87,9 @@ A file used only by one module stays in that module; it moves to `components/` o
 ### Imports
 
 - Use `import qs.<folder>` (`qs.config`, `qs.components`, `qs.services`, `qs.modules.bar`…).
+- Pragmas come first, then one blank line, then the imports.
 - No `qmldir` files: Quickshell generates them, a hand-written one breaks editor completion.
+- `.qmllint.ini` at the repo root disables `ImportFailure`: the linter reads singletons without that generated `qmldir`. A wrong import in any QML file is then only reported by `qs log`, not by the editor.
 
 ### Comments
 
@@ -94,6 +97,7 @@ A file used only by one module stays in that module; it moves to `components/` o
 - Otherwise, comment only workarounds and complex code: one line, before the block.
 - Prefer clear names to comments. `config/` is the exception: section labels and units (`// ms`) are welcome.
 - Glyphs are written as the character itself. Only invisible characters use an escape, with a comment saying what it is.
+- A gap in the linter's type information (typed models, `margins`, `PanelWindow`) is silenced on its own line with `// qmllint disable <category>`.
 
 ### State across reloads
 
@@ -109,4 +113,4 @@ A file used only by one module stays in that module; it moves to `components/` o
 
 ### Checks
 
-- After a change, check `qs log` for warnings.
+- After a change, check `qs log` for warnings and run `qmllint` on the touched files: the shell should report none.

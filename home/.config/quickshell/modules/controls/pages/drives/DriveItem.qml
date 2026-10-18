@@ -15,14 +15,14 @@ BrutalSurface {
     readonly property bool usageKnown: mounted && modelData.used >= 0 && modelData.avail >= 0
 
     Layout.fillWidth: true
-    implicitHeight: content.implicitHeight + Theme.spacing.sm * 2 + shadowOffset
+    implicitHeight: column.implicitHeight + Theme.spacing.sm * 2 + shadowOffset
 
     fillColor: Colors.bgOverlay
     borderColor: mounted ? Colors.accent : Colors.borderDefault
     borderWidth: mounted ? Theme.dims.borderWidthActive : Theme.dims.borderWidth
 
     ColumnLayout {
-        id: content
+        id: column
         anchors.fill: parent
         anchors.margins: Theme.spacing.sm
         spacing: Theme.spacing.xs

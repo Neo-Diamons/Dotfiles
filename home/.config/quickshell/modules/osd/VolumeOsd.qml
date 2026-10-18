@@ -69,9 +69,7 @@ PanelWindow { // qmllint disable uncreatable-type
     color: "transparent"
 
     anchors.bottom: true
-    margins { // qmllint disable unresolved-type unqualified
-        bottom: Theme.dims.osdBottomMargin
-    }
+    margins.bottom: Theme.dims.osdBottomMargin // qmllint disable missing-property
 
     implicitWidth: Theme.dims.osdWidth + Theme.shadow.lg
     implicitHeight: panel.implicitHeight

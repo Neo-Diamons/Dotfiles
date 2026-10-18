@@ -7,8 +7,8 @@ import qs.config
 BrutalSurface {
     id: root
 
-    property alias text: input.text
-    property alias input: input
+    property alias text: field.text
+    property alias input: field
     property string placeholder: ""
     property string prompt: ""
     property bool password: false
@@ -19,13 +19,13 @@ BrutalSurface {
     signal accepted
 
     function focusInput() {
-        input.forceActiveFocus();
+        field.forceActiveFocus();
     }
 
     implicitHeight: fieldHeight + shadowOffset
     shadowOffset: framed ? Theme.shadow.sm : 0
     fillColor: framed ? Colors.bgBase : Colors.bgOverlay
-    borderColor: !framed ? "transparent" : (input.activeFocus ? Colors.accent : Colors.borderDefault)
+    borderColor: !framed ? "transparent" : (field.activeFocus ? Colors.accent : Colors.borderDefault)
     borderWidth: framed ? Theme.dims.borderWidthActive : 0
 
     Rectangle {
@@ -47,7 +47,7 @@ BrutalSurface {
     }
 
     TextInput {
-        id: input
+        id: field
         anchors.left: promptBlock.right
         anchors.right: parent.right
         anchors.top: parent.top
@@ -68,7 +68,7 @@ BrutalSurface {
         BrutalText {
             anchors.fill: parent
             verticalAlignment: Text.AlignVCenter
-            visible: input.text === ""
+            visible: field.text === ""
             text: root.placeholder
             color: Colors.textMuted
             font.bold: true

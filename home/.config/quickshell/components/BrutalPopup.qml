@@ -64,9 +64,7 @@ PanelWindow { // qmllint disable uncreatable-type
         left: true
         right: true
     }
-    margins { // qmllint disable unqualified unresolved-type
-        right: Theme.dims.barWidth
-    }
+    margins.right: Theme.dims.barWidth // qmllint disable missing-property
 
     exclusionMode: ExclusionMode.Ignore
     WlrLayershell.layer: WlrLayer.Overlay
