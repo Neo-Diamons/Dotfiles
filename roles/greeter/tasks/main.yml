@@ -50,6 +50,19 @@
   register: greeter_dead_link
   changed_when: greeter_dead_link.stdout | length > 0
 
+- name: Greetd drop-in folder
+  ansible.builtin.file:
+    path: /etc/systemd/system/greetd.service.d
+    state: directory
+    mode: "0755"
+
+- name: Clear the console before the greeter
+  ansible.builtin.copy:
+    src: clear-vt.conf
+    dest: /etc/systemd/system/greetd.service.d/clear-vt.conf
+    mode: "0644"
+  notify: Reload systemd units
+
 - name: Enable greetd
   ansible.builtin.systemd:
     name: greetd
