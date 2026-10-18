@@ -4,7 +4,6 @@ $os\
 $directory\
 $git_branch\
 $git_status\
-$fill $cmd_duration $time\
 (\
     $python\
     $conda\
@@ -15,6 +14,8 @@ $fill $cmd_duration $time\
 )
 [╰─](fg:arrow)$character\
 """
+
+right_format = "$cmd_duration $time"
 
 add_newline = false
 
@@ -124,9 +125,6 @@ symbol = " "
 
 [package]
 disabled=false
-
-[fill]
-symbol = " "
 
 [nodejs]
 format = "[ $symbol$version ]($style)"
