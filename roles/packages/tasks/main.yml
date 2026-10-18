@@ -1,6 +1,19 @@
 - name: System packages and login shell
   become: true
   block:
+    - name: Find missing packages
+      ansible.builtin.command: pacman -T {{ packages | join(' ') }}
+      register: packages_missing
+      changed_when: false
+      failed_when: packages_missing.rc not in [0, 127]
+      check_mode: false
+
+    - name: Upgrade the system before installing
+      community.general.pacman:
+        update_cache: true
+        upgrade: true
+      when: packages_missing.stdout_lines | length > 0
+
     - name: Install packages
       community.general.pacman:
         name: "{{ packages }}"
