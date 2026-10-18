@@ -1,3 +1,11 @@
+_printed_before_prompt() {
+  local reply
+  print -n '\e[6n'
+  read -rs -d R -t 1 reply || return 1
+  [[ $reply =~ '\[([0-9]+);' ]] || return 1
+  (( match[1] > 1 ))
+}
+
 _run_startup_fetch() {
   add-zsh-hook -d precmd _run_startup_fetch
 
@@ -6,6 +14,7 @@ _run_startup_fetch() {
   _is_vt && return
   (( LINES >= 30 && COLUMNS >= 60 )) || return
   command -v fastfetch &>/dev/null || return
+  _printed_before_prompt && return
   [[ -n "$TMUX" ]] && tmux set-option -q @greeted 1
 
   local info_w=50 gap=3
