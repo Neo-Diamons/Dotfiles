@@ -7,6 +7,9 @@ hl.on("hyprland.start", function()
 {% if sunshine %}
     hl.exec_cmd("sunshine")
 {% endif %}
+{% if not laptop %}
+    hl.exec_cmd("flatpak run com.valvesoftware.Steam -silent")
+{% endif %}
 {% if autostart_discord %}
     hl.exec_cmd("flatpak run com.discordapp.Discord --start-minimized --ozone-platform=x11 >/tmp/discord.log 2>&1")
 {% endif %}
