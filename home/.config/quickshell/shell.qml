@@ -65,6 +65,7 @@ ShellRoot {
     }
     NotifWindow {}
     VolumeOsd {}
+    BrightnessOsd {}
     WallpaperMenu {}
     PolkitDialog {}
 }
