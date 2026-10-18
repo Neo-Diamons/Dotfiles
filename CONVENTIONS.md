@@ -25,6 +25,7 @@
 | ------------ | ------------------------------------------------------------------------- |
 | `packages`   | pacman packages, login shell, `-e debloat=true` removals                  |
 | `rust`       | rustup toolchain and cargo crates                                         |
+| `node`       | First Node.js LTS through fnm (later versions: `fnm install`)             |
 | `flatpak`    | Flathub remote and flatpaks                                               |
 | `theme`      | Icon and cursor themes (checksum-verified), flatpak override, `gsettings` |
 | `browser`    | Zen policy (extensions and settings)                                      |

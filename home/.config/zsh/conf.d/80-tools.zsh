@@ -3,11 +3,12 @@
 # --- Tool integrations ---
 command -v zoxide &>/dev/null && eval "$(zoxide init zsh --cmd cd)"
 command -v direnv &>/dev/null && eval "$(direnv hook zsh)"
+command -v fnm &>/dev/null && eval "$(fnm env --use-on-cd --shell zsh)"
 
 # --- fzf ---
 _fd_skip=(
   .git .venv .direnv .cache .local/share .var .steam .claude .ansible
-  .cargo .rustup .npm .nvm node_modules __pycache__ .mypy_cache
+  .cargo .rustup .npm .fnm node_modules __pycache__ .mypy_cache
   site-packages lib target Games Bottles
 )
 _fd_excludes=${(j: :)${_fd_skip/#/--exclude }}

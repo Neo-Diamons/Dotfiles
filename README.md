@@ -33,7 +33,7 @@ ansible-playbook site.yml -l parnasse -k -K          # apply to another machine 
 | `-e reload=true`      | Reload Hyprland and Quickshell even if nothing changed                  |
 | `-e debloat=true`     | Remove the bare-CachyOS extras (first install only)                     |
 | `-e extensions=true`  | Rewrite the Zen policy even when it already exists                      |
-| `--tags <tag>`        | `packages`, `rust`, `flatpak`, `theme`, `browser`, `wallpapers`, `files`, `system`, `wallust` |
+| `--tags <tag>`        | `packages`, `rust`, `node`, `flatpak`, `theme`, `browser`, `wallpapers`, `files`, `system`, `wallust` |
 
 ## Layout
 
@@ -45,7 +45,7 @@ inventory/
   hosts.yml               # olympe (local), parnasse (ssh)
   group_vars/all/         # shared values: main (switches, host traits), packages, flatpaks, zen
   host_vars/<host>.yml    # monitors, GPU and other traits of one machine
-roles/                    # packages, rust, flatpak, theme, browser, wallpapers, dotfiles, system
+roles/                    # packages, rust, node, flatpak, theme, browser, wallpapers, dotfiles, system
 home/                     # mirror of ~ with real names, copied as-is
 templates/                # per-machine files only, mirroring ~ with a .j2 suffix
 CONVENTIONS.md            # coding rules (Ansible, Quickshell, Python scripts)

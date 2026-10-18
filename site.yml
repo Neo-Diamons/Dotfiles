@@ -17,6 +17,7 @@
   roles:
     - { role: packages, tags: [packages] }
     - { role: rust, tags: [rust] }
+    - { role: node, tags: [node] }
     - { role: flatpak, tags: [flatpak] }
     - { role: theme, tags: [theme] }
     - { role: browser, tags: [browser] }

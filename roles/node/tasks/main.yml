@@ -1,0 +1,4 @@
+- name: Install the latest Node.js LTS
+  ansible.builtin.command:
+    cmd: fnm install --lts
+    creates: "{{ home_dir }}/.local/share/fnm/node-versions/v*"

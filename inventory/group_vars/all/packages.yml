@@ -23,7 +23,7 @@ package_groups:
     - udisks2
     - udiskie
   audio_bluetooth: [pipewire-pulse, pipewire-alsa, wireplumber, bluez, bluez-utils]
-  dev: [rustup, nvm, lua-language-server, vis, vis-lexers, tokei, ansible-lint]
+  dev: [rustup, fnm, lua-language-server, vis, vis-lexers, tokei, ansible-lint]
   fonts: [noto-fonts-cjk, noto-fonts-emoji, ttf-space-mono-nerd]
   flatpak: [flatpak]
   sunshine: [sunshine]
