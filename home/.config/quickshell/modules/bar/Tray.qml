@@ -2,18 +2,24 @@ pragma ComponentBehavior: Bound
 
 import QtQuick
 import QtQuick.Layouts
+import Quickshell
 import Quickshell.Services.SystemTray
 import qs.components
 import qs.config
 import qs.services
 
-// System tray icons: left click activates, middle click secondary action, right click opens the menu
+// System tray icons: left click activates (or launches the app, see launchers), middle click secondary action, right click opens the menu
 ColumnLayout {
     id: root
     spacing: Theme.spacing.xs
     Layout.alignment: Qt.AlignHCenter
 
     property var screen
+
+    readonly property var launchers: ({
+        "steam": ["flatpak", "run", "com.valvesoftware.Steam"],
+        "Sunshine": ["xdg-open", "https://localhost:47990"]
+    })
 
     TrayMenu {
         id: trayMenu
@@ -30,7 +36,13 @@ ColumnLayout {
             Layout.alignment: Qt.AlignHCenter
             selected: trayMenu.open && trayMenu.menu === modelData.menu
 
-            onLeftClicked: modelData.activate()
+            onLeftClicked: {
+                const launcher = root.launchers[modelData.id];
+                if (launcher)
+                    Quickshell.execDetached(launcher);
+                else
+                    modelData.activate();
+            }
             onMiddleClicked: modelData.secondaryActivate()
             onRightClicked: {
                 if (modelData.hasMenu)
