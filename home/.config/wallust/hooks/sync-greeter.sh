@@ -13,7 +13,7 @@ theme="$dir/theme.json"
 changed=
 
 if ! cmp -s "$wallpaper" "$target"; then
-    cp "$wallpaper" "$target.tmp" && mv -f "$target.tmp" "$target" || exit 0
+    cp "$wallpaper" "$target.tmp" && chmod 644 "$target.tmp" && mv -f "$target.tmp" "$target" || exit 0
     changed=1
 fi
 
@@ -28,13 +28,11 @@ awk -v wallpaper="$target" '
 ' "$colors" > "$theme.tmp" || { rm -f "$theme.tmp"; exit 0; }
 
 if ! cmp -s "$theme.tmp" "$theme"; then
-    mv -f "$theme.tmp" "$theme"
+    chmod 644 "$theme.tmp" && mv -f "$theme.tmp" "$theme" || exit 0
     changed=1
 else
     rm -f "$theme.tmp"
 fi
-
-chmod 644 "$target" "$theme"
 
 rm -f "$dir/Colors.qml"
 for old in "$dir"/wallpaper.*; do
