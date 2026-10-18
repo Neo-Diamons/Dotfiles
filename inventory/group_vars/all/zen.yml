@@ -12,6 +12,8 @@ zen_extensions:
   "sponsorBlocker@ajay.app": { <<: *zen_extension, install_url: "{{ zen_amo_url }}/sponsorblock/latest.xpi" }
   "myallychou@gmail.com": { <<: *zen_extension, install_url: "{{ zen_amo_url }}/youtube-recommended-videos/latest.xpi" }   # Unhook
   "{762f9885-5a13-4abd-9c77-433dcd38b8fd}": { <<: *zen_extension, install_url: "{{ zen_amo_url }}/return-youtube-dislikes/latest.xpi" }
+  "{2e5ff8c8-32fe-46d0-9fc8-6b8986621f3c}": { <<: *zen_extension, install_url: "{{ zen_amo_url }}/search_by_image/latest.xpi" }
+  "{eac6e624-97fa-4f28-9d24-c06c9b8aa713}": { <<: *zen_extension, install_url: "{{ zen_amo_url }}/material-icons-for-github/latest.xpi" }
 
 zen_policies:
   TranslateEnabled: false
