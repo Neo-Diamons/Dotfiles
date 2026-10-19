@@ -3,7 +3,12 @@ format = """\
 $os\
 $directory\
 $git_branch\
-$git_status\
+$git_status
+[╰─](fg:arrow)$character\
+"""
+
+right_format = """\
+$cmd_duration $time\
 (\
     $python\
     $conda\
@@ -11,11 +16,8 @@ $git_status\
     $c\
     $rust\
     $java\
-)
-[╰─](fg:arrow)$character\
+)\
 """
-
-right_format = "$cmd_duration $time"
 
 add_newline = false
 
