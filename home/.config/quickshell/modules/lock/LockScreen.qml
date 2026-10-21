@@ -6,7 +6,6 @@ import Quickshell.Io
 import Quickshell.Wayland
 import Quickshell.Services.Pam
 import qs.components
-import qs.config
 import qs.utils
 
 Scope {
@@ -16,10 +15,6 @@ Scope {
     property string pending: ""
 
     signal authFailed(string text)
-
-    function screens(on: bool): void {
-        Quickshell.execDetached(["hyprctl", "dispatch", `hl.dsp.dpms({ action = "${on ? "enable" : "disable"}" })`]);
-    }
 
     IpcHandler {
         target: "lock"
@@ -49,21 +44,12 @@ Scope {
         }
     }
 
-    IdleMonitor {
-        enabled: session.locked
-        timeout: Config.lockBlankTimeout
-        respectInhibitors: false
-        onIsIdleChanged: root.screens(!isIdle)
-    }
-
     WlSessionLock {
         id: session
 
         onLockedChanged: {
-            if (!locked) {
+            if (!locked)
                 pam.abort();
-                root.screens(true);
-            }
         }
 
         WlSessionLockSurface {
