@@ -12,6 +12,7 @@ hl.bind(mainMod .. " + SHIFT + M",
     hl.dsp.exec_cmd("command -v hyprshutdown >/dev/null 2>&1 && hyprshutdown || hyprctl dispatch 'hl.dsp.exit()'"))
 hl.bind(mainMod .. " + BackSpace", hl.dsp.exec_cmd("qs ipc call power toggle"))
 hl.bind(mainMod .. " + SHIFT + L", hl.dsp.exec_cmd("qs ipc call lock lock"))
+hl.bind(mainMod .. " + V", hl.dsp.exec_cmd("qs ipc call vault toggle"))
 hl.bind("Print", hl.dsp.exec_cmd("hyprshot --mode region --clipboard-only"))
 hl.bind(mainMod .. " + Print", hl.dsp.exec_cmd("hyprshot --mode output -m active --clipboard-only"))
 hl.bind(mainMod .. " + SHIFT + Print", hl.dsp.exec_cmd("hyprshot --mode window --clipboard-only"))

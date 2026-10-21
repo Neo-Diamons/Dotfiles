@@ -22,6 +22,7 @@ package_groups:
     - 7zip
     - udisks2
     - udiskie
+    - gocryptfs
   audio_bluetooth: [pipewire-pulse, pipewire-alsa, wireplumber, bluez, bluez-utils]
   dev: [rustup, fnm, lua-language-server, vis, vis-lexers, tokei, ansible-lint]
   fonts: [noto-fonts-cjk, noto-fonts-emoji, ttf-space-mono-nerd]

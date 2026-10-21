@@ -11,10 +11,11 @@ import qs.modules.notifications
 import qs.modules.osd
 import qs.modules.power
 import qs.modules.polkit
+import qs.modules.vault
 import qs.modules.wallpaper
 import qs.utils
 
-// Entry point: bars, launcher, power menu, lock screen, notifications, OSD, wallpaper menu and polkit agent (`qs ipc call shell reload`)
+// Entry point: bars, launcher, power menu, lock screen, vault, notifications, OSD, wallpaper menu and polkit agent (`qs ipc call shell reload`)
 ShellRoot {
     id: root
 
@@ -68,4 +69,5 @@ ShellRoot {
     BrightnessOsd {}
     WallpaperMenu {}
     PolkitDialog {}
+    VaultDialog {}
 }

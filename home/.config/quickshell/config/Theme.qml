@@ -72,6 +72,10 @@ QtObject {
         // Polkit password dialog
         readonly property int polkitWidth: 420
 
+        // Vault password dialog
+        readonly property int vaultWidth: 420
+
+        // Login panel
         readonly property int loginWidth: 380
     }
 
