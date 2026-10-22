@@ -73,7 +73,7 @@ ColumnLayout {
                     font.bold: true
                     font.pixelSize: Theme.font.sizeSmall
                     elide: Text.ElideRight
-                    Layout.maximumWidth: stream.width * Theme.dims.trailingMaxRatio
+                    Layout.maximumWidth: root.width * Theme.dims.trailingMaxRatio
                 }
 
                 BrutalText {
