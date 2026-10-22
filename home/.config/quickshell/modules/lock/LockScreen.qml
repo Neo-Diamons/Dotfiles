@@ -11,7 +11,7 @@ import qs.utils
 Scope {
     id: root
 
-    readonly property bool locked: session.locked
+    property bool locked: false
     property string pending: ""
 
     signal authFailed(string text)
@@ -20,8 +20,7 @@ Scope {
         target: "lock"
 
         function lock(): void {
-            if (!session.locked)
-                session.locked = true;
+            root.locked = true;
         }
     }
 
@@ -37,7 +36,7 @@ Scope {
         onCompleted: result => {
             root.pending = "";
             if (result === PamResult.Success) {
-                session.locked = false;
+                root.locked = false;
                 return;
             }
             root.authFailed(result === PamResult.Failed ? "Wrong password, try again" : "Authentication error, try again");
@@ -46,6 +45,8 @@ Scope {
 
     WlSessionLock {
         id: session
+
+        locked: root.locked
 
         onLockedChanged: {
             if (!locked)
