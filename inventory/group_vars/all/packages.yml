@@ -16,6 +16,7 @@ package_groups:
     - xsettingsd
     - wl-clipboard
     - xdotool
+    - xorg-xrandr
     - foot
     - yazi
     - ffmpeg

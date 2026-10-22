@@ -16,6 +16,16 @@ hl.window_rule({
     size  = "340 720",
 })
 
+hl.window_rule({
+    name             = "steam-toasts-pin",
+    match            = { class = "^steam$", initial_title = "^notificationtoasts_" },
+    float            = true,
+    pin              = true,
+    stay_focused     = true,
+    no_focus         = true,
+    no_initial_focus = true,
+})
+
 hl.on("window.title", function(window)
     if window.class == "app.zen_browser.zen" and window.title:find("^Extension: %(Bitwarden") and not window.floating then
         hl.timer(function()

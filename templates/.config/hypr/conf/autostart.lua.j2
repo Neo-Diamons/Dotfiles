@@ -1,5 +1,6 @@
 hl.on("hyprland.start", function()
     hl.exec_cmd("hyprctl setcursor {{ cursor_theme_name }} {{ cursor_theme_size }}")
+    hl.exec_cmd("xrandr --output {{ monitors[0].output }} --primary") -- Steam toast
     hl.exec_cmd("udiskie --no-tray")
     hl.exec_cmd("$HOME/.config/hypr/scripts/random-wallpaper.sh")
     hl.exec_cmd("quickshell")
