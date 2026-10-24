@@ -9,3 +9,15 @@ hl.monitor({
 
 -- The first monitor listed is the main one: cursor start and bar
 hl.config({ cursor = { default_monitor = "{{ monitors[0].output }}" } })
+
+-- Pin workspaces 1-10 to the main monitor so they never follow the others
+for ws = 1, 10 do
+    hl.workspace_rule({ workspace = tostring(ws), monitor = "{{ monitors[0].output }}", default = ws == 1 })
+end
+{% if sunshine %}
+
+-- Sunshine streams the main monitor: its absolute mouse, pen and touch must map to it, not to all monitors
+{% for name in ["libvirtualhid-mouse-(absolute)", "libvirtualhid-pen-tablet", "libvirtualhid-touchscreen"] %}
+hl.device({ name = "{{ name }}", output = "{{ monitors[0].output }}" })
+{% endfor %}
+{% endif %}
