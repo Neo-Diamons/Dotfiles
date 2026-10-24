@@ -1,0 +1,39 @@
+{
+	"env": {
+		"PATH": "$(PATH):$(HOME)/.local/bin"
+	},
+	"apps": [
+		{
+			"name": "Desktop",
+			"image-path": "desktop.png"
+    	},
+		{
+			"name": "Low Res Desktop",
+			"image-path": "desktop.png",
+			"prep-cmd": [
+				{
+				"do": "xrandr --output HDMI-1 --mode 1920x1080",
+				"undo": "xrandr --output HDMI-1 --mode 1920x1200"
+				}
+			]
+		},
+		{
+			"name": "Steam Big Picture",
+			"detached": [
+				"flatpak run com.valvesoftware.Steam steam://open/bigpicture"
+			],
+			"undo": [
+				"flatpak run com.valvesoftware.Steam steam://close/bigpicture"
+			],
+			"image-path": "steam.png"
+		},
+		{
+			"name": "Krita",
+			"image-path": "/var/lib/flatpak/exports/share/icons/hicolor/512x512/apps/org.kde.krita.png",
+			"detached": [
+				"flatpak run org.kde.krita"
+			]
+		}
+	]
+}
+

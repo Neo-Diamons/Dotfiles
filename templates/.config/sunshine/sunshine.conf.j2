@@ -1,0 +1,4 @@
+capture = wlr
+output_name = {{ monitors[0].output }}
+encoder = {{ 'nvenc' if gpu == 'nvidia' else 'vaapi' }}
+
