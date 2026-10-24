@@ -3,7 +3,6 @@
   register: dotfiles_manifest_raw
   failed_when: false
 
-# Build artifacts (__pycache__) are never synced: Python rewrites them in place.
 - name: Collect repo files
   ansible.builtin.set_fact:
     dotfiles_previous: >-
@@ -12,13 +11,12 @@
     dotfiles_rendered: []
     dotfiles_tree: >-
       {{ lookup('community.general.filetree', playbook_dir ~ '/home/', wantlist=True)
-      | rejectattr('path', 'search', '(^|/)__pycache__(/|$)') | list }}
+      | rejectattr('path', 'search', '(^|/)__pycache__(/|$)') | dotfiles_skip(dotfiles_skipped) }}
     dotfiles_template_files: >-
       {{ lookup('community.general.filetree', playbook_dir ~ '/templates/', wantlist=True)
-      | selectattr('state', 'eq', 'file') | selectattr('path', 'match', '.*\.j2$') | list }}
+      | selectattr('state', 'eq', 'file') | selectattr('path', 'match', '.*\.j2$')
+      | dotfiles_skip(dotfiles_skipped) }}
 
-# Per-machine files: templates/<path>.j2 is rendered to ~/<path> (done here, on
-# the controller, so the checksum is known before anything is written).
 - name: Render per-machine files
   ansible.builtin.set_fact:
     dotfiles_rendered: >-
@@ -36,13 +34,14 @@
       {{ lookup('ansible.builtin.pipe', 'cd ' ~ playbook_dir ~ '/home && find . -type f
       -not -path "*/__pycache__/*" -print0 | xargs -0 sha1sum').splitlines() | dotfiles_sums }}
 
-- name: Wanted checksums
+- name: Managed paths
   ansible.builtin.set_fact:
-    dotfiles_wanted: "{{ dotfiles_repo_sums | dotfiles_wanted(dotfiles_rendered) }}"
     dotfiles_managed: "{{ dotfiles_items | map(attribute='path') | list }}"
 
-# One command (not one per file): keeps the apply fast, also over SSH.
-# Prints sha1sum lines, then stat lines (mode), for every managed file that exists.
+- name: Wanted checksums
+  ansible.builtin.set_fact:
+    dotfiles_wanted: "{{ dotfiles_repo_sums | dotfiles_wanted(dotfiles_rendered, dotfiles_managed) }}"
+
 - name: Checksum the live files
   ansible.builtin.shell:
     cmd: xargs -d '\n' sh -c 'sha1sum "$@"; stat -c "%a  %n" "$@"' _ 2>/dev/null || true

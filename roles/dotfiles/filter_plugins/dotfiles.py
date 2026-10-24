@@ -31,9 +31,16 @@ def modes_to_dict(lines):
     return _parse(lines, want_sums=False)
 
 
-def wanted_sums(repo, rendered):
+def without_skipped(items, prefixes):
+    """Items outside the skipped folders (prefixes like ".config/sunshine/")."""
+    folders = tuple(p.rstrip("/") + "/" for p in prefixes)
+    return [i for i in items if not (i["path"] + "/").startswith(folders)]
+
+
+def wanted_sums(repo, rendered, managed):
     """Checksums every managed file should have: repo files plus rendered templates."""
-    return {**repo, **{r["path"]: r["sum"] for r in rendered}}
+    wanted = {**repo, **{r["path"]: r["sum"] for r in rendered}}
+    return {path: wanted[path] for path in managed}
 
 
 def files_to_copy(items, live, wanted, modes):
@@ -65,6 +72,7 @@ class FilterModule:
         return {
             "dotfiles_sums": sums_to_dict,
             "dotfiles_modes": modes_to_dict,
+            "dotfiles_skip": without_skipped,
             "dotfiles_wanted": wanted_sums,
             "dotfiles_to_copy": files_to_copy,
             "dotfiles_conflicts": conflicts,
